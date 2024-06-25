@@ -9,9 +9,13 @@ const config: Config = {
   theme: {
     extend: {
       backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      colors: {
+        main_color: 'rgb(242, 240, 233)',
+        "selected-bg": "#cccccc",
+      },
+      fontFamily: {
+        'noto-sans-cjk': ['Noto Sans CJK JP', 'sans-serif'],
       },
     },
   },
