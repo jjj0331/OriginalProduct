@@ -1,29 +1,46 @@
-import React from 'react'
-
+"use client";
+import React, { useContext } from 'react'
+import Link from 'next/link';
+import { TokenContext } from './context/TokenContext';
 const Header = () => {
+  const { accessToken } = useContext(TokenContext);
+
   return (
     <div className='flex justify-between items-center border-b-2 
     border-black box-content py-2 h-10 px-4 '>
       <div className='text-2xl font-bold'>
           みんなのガイドライン
       </div>
-
+      
       <div className='space-x-5 flex'>
-        <a href="/" className='hover:bg-selected-bg my-0 py-2 px-4 rounded-lg'>
+      <Link href="/"className='hover:bg-selected-bg my-0 py-2 px-4 rounded-lg'>
           ホーム
-        </a>
-        <a href="/form/new" className='hover:bg-selected-bg my-0 py-2 px-4 rounded-lg'>
+      </Link>
+
+      <Link href="/form/new" className='hover:bg-selected-bg my-0 py-2 px-4 rounded-lg'>
           記事の投稿
-        </a>
+      </Link>
+
         <a href="#info" className='hover:bg-selected-bg my-0 py-2 px-4 rounded-lg'>
           修正依頼
         </a>
-        <a href="/login" className='border-2 rounded-lg hover:bg-selected-bg my-0 py-2 px-4 font-bold flex items-center'>
+
+      {accessToken?(
+        <Link href="/form/new" className='border-2 rounded-lg my-0 py-2 px-4 bg-orange-400 font-bold flex items-center'>
           <button className='flex items-center'>
             <i className="fa-solid fa-user"></i>
-            <span className='ml-2'>ログイン</span>
+            <span className='ml-2'>MyPage</span>
           </button>
-        </a>
+        </Link>
+      ):(
+      <a href="/login" className='border-2 rounded-lg hover:bg-selected-bg my-0 py-2 px-4 font-bold flex items-center'>
+        <button className='flex items-center'>
+          <i className="fa-solid fa-user"></i>
+          <span className='ml-2'>ログイン</span>
+        </button>
+      </a>
+      )}
+
       </div>
 
     </div>

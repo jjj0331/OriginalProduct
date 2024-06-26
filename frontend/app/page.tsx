@@ -7,14 +7,7 @@ export default function Home() {
       <Serch/>
       <div className="mt-4 mx-4 grid grid-cols-4 gap-4">
       <Card/>
-      <Card/>
-      <Card/>
-      <Card/>
-      <Card/>
-      <Card/>
-      <Card/>
-      <Card/>
-      <Card/>
+
       </div>
       
     </main>

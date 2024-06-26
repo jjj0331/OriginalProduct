@@ -6,4 +6,5 @@ Rails.application.routes.draw do
 
   #【ガイドライン】
   post 'guidelines/new',    to: 'guidelines#create'
+  get  'guidelines/all',    to: 'guidelines#showall'
 end
