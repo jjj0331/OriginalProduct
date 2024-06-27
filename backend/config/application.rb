@@ -12,15 +12,15 @@ module MyApi
     config.autoload_lib(ignore: %w(assets tasks))
     config.api_only = true
 
+    # CORS設定
     config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'http://localhost:3000' # 必要に応じて許可するオリジンを指定
+        origins 'http://localhost:3000', 'http://127.0.0.1:3000' # 両方のオリジンを指定
         resource '*',
           headers: :any,
           methods: [:get, :post, :put, :patch, :delete, :options, :head],
           credentials: true
       end
     end
-
   end
 end

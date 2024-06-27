@@ -1,9 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-const Detailsform = ({ prop, closeDetail }) => {
+const Detailsform = ({ closeDetail }) => {
   const [items, setItems] = useState([{ detailtitle: '', detailcontent: '' }]);
   const [details, setDetails] = useState({ detailtitle: '', detailcontent: '' });
+  
   const adddetails=function(){
     const newDetail={ detailtitle: '', detailcontent: '' }
     setItems([...items, newDetail]);

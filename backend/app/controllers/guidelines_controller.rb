@@ -8,7 +8,7 @@ class GuidelinesController < ApplicationController
     current_user
     if @current_user
       @guideline = Guideline.new(guideline_params)
-      @guideline.user_id=@current_use.user_id
+      @guideline.user_id=@current_user.id
       if @guideline.save
         render json: @guideline, status: :created
       else
@@ -21,7 +21,7 @@ class GuidelinesController < ApplicationController
   
   #ガイドラインの参照
   def showall
-    @alldata=Guideline.includes(tasks: :detail_tasks)
+    @alldata=Guideline.includes(tasks: :detail_tasks).limit(20)
     render json:@alldata,status: :ok
   end  
   
