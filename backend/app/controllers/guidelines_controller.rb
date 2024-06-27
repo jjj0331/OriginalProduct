@@ -4,10 +4,11 @@ class GuidelinesController < ApplicationController
 
   #ガイドラインの作成
   def create
-    login_user=current_user
-    if login_user
+    #helperのメソッドを実行
+    current_user
+    if @current_user
       @guideline = Guideline.new(guideline_params)
-
+      @guideline.user_id=@current_use.user_id
       if @guideline.save
         render json: @guideline, status: :created
       else
