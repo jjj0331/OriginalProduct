@@ -13,6 +13,15 @@ class AuthController < ApplicationController
   end
 
   #ユーザの参照
+  def showloginuser
+    current_user
+    if @current_user
+      render json:{user_id:@current_user.id}
+    else
+      render json:{message:'そんなユーザは存在しない'}
+    end    
+  end  
+
   def show
     begin
       @user = User.find(params[:id])

@@ -21,9 +21,18 @@ class GuidelinesController < ApplicationController
   
   #ガイドラインの参照
   def showall
-    @alldata=Guideline.includes(tasks: :detail_tasks).limit(20)
+    @alldata=Guideline.limit(20)
     render json:@alldata,status: :ok
-  end  
+  end
+
+  def show
+    begin
+      @data = Guideline.includes(tasks: :detail_tasks).find(params[:id])
+      render json: @data.as_json(include: { tasks: { include: :detail_tasks } }), status: :ok
+    rescue ActiveRecord::RecordNotFound
+      render json: { error: '探しているガイドラインは存在しない' }, status: :not_found
+    end
+  end
   
   #パラメータ制御
   private
