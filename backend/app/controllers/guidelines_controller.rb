@@ -33,6 +33,61 @@ class GuidelinesController < ApplicationController
       render json: { error: '探しているガイドラインは存在しない' }, status: :not_found
     end
   end
+
+
+#ガイドラインの更新
+def update
+  current_user # ヘルパーメソッドを実行
+  if @current_user
+    @guideline = Guideline.find_by(id: params[:id]) # 更新対象のガイドラインを取得
+    if @guideline
+      if @guideline.user_id == @current_user.id # 所有者を確認
+        if @guideline.update(guideline_params)
+          render json: @guideline, status: :ok # ステータスコードを適切に変更
+        else
+          render json: { message: '更新に失敗しました', errors: @guideline.errors.full_messages }, status: :unprocessable_entity
+        end
+      else
+        render json: { message: '権限がありません' }, status: :forbidden
+      end
+    else
+      render json: { message: 'ガイドラインが見つかりません' }, status: :not_found
+    end
+  else
+    render json: { message: 'ログインしてください' }, status: :unauthorized
+  end
+end
+
+#ガイドラインの削除
+def destroy
+  current_user # ヘルパーメソッドを実行
+  if @current_user
+    @guideline = Guideline.find_by(id: params[:id]) # 更新対象のガイドラインを取得
+    if @guideline
+      if @guideline.user_id == @current_user.id # 所有者を確認
+        if @guideline.destroy
+          render json: @guideline, status: :ok # ステータスコードを適切に変更
+        else
+          render json: { message: '削除に失敗しました', errors: @guideline.errors.full_messages }, status: :unprocessable_entity
+        end
+      else
+        render json: { message: '権限がありません' }, status: :forbidden
+      end
+    else
+      render json: { message: 'ガイドラインが見つかりません' }, status: :not_found
+    end
+  else
+    render json: { message: 'ログインしてください' }, status: :unauthorized
+  end
+end
+
+
+private
+
+def guideline_params
+  params.require(:guideline).permit(:title, :description, tasks_attributes: [:id, :title, :description, detail_tasks_attributes: [:id, :title, :description]])
+end
+
   
   #パラメータ制御
   private

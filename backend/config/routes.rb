@@ -6,7 +6,9 @@ Rails.application.routes.draw do
   get  'login',    to: 'auth#showloginuser'
 
   #【ガイドライン】
-  post 'guidelines/new',    to: 'guidelines#create'
-  get  'guidelines/all',    to: 'guidelines#showall'
-  get  'guidelines/:id',    to: 'guidelines#show'
+  post 'guidelines/new',     to: 'guidelines#create'
+  get  'guidelines/all',     to: 'guidelines#showall'
+  get  'guidelines/:id',     to: 'guidelines#show'
+  post 'guidelines/:id/edit',to: 'guidelines#update'
+  delete 'guidelines/:id',   to: 'guidelines#destroy'
 end

@@ -1,32 +1,32 @@
 'use client';
 import Detailsform from '@/app/Components/Form/Detailtasks/page';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import axios from "axios";
 import { useRouter } from 'next/navigation';
-import { TokenContext } from '../../context/TokenContext';
+import { TokenContext } from '../../../context/TokenContext';
+import { useParams } from 'next/navigation';
+
 const Form = () => {
- 
   const { accessToken } = useContext(TokenContext);
-  console.log(accessToken);
+  const { id } = useParams();
+
   const [isDetailVisible, setDetailVisible] = useState(false);
   const [currentTodoIndex, setCurrentTodoIndex] = useState(null);
-  const [todos, setTodos] = useState([{ title: '', content: '', detail_tasks: [] }]);
+  const [todos, setTodos] = useState([]);
   const [guidelineTitle, setGuidelineTitle] = useState('');
   const [guidelineDescription, setGuidelineDescription] = useState('');
-  
-
   const router = useRouter();
-  
+
   const addTodos = () => {
     const newTodo = { title: '', content: '', detail_tasks: [] };
     setTodos([...todos, newTodo]);
   };
-  
+
   const removeItem = (index) => {
     const newTodos = todos.filter((todo, i) => i !== index);
     setTodos(newTodos);
   };
-  
+
   const showDetail = (index) => {
     setCurrentTodoIndex(index);
     setDetailVisible(true);
@@ -53,7 +53,6 @@ const Form = () => {
     const newTodos = [...todos];
     newTodos[index].detail_tasks = details;
     setTodos(newTodos);
-    console.log(todos);
   };
 
   const Submit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -72,15 +71,57 @@ const Form = () => {
         }))
       };
 
-      const response = await axios.post('http://127.0.0.1:3001/guidelines/new', 
+      const response = await axios.post(`http://127.0.0.1:3001/guidelines/${id}/edit`, 
         { guideline },
-        {headers: {'Authorization': `${accessToken}`}} 
+        { headers: { 'Authorization': `${accessToken}` } }
       );
-      alert("投稿できました");
+      alert("更新できました");
       router.push('/');
 
     } catch (error) {
       console.error('投稿に失敗しました', error);
+    }
+  };
+
+  useEffect(() => {
+    const catchdatas = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:3001/guidelines/${id}`);
+        const guidelineData = response.data;
+        setGuidelineTitle(guidelineData.title);
+        setGuidelineDescription(guidelineData.description);
+        setTodos(guidelineData.tasks.map(task => ({
+          title: task.title,
+          content: task.description,
+          detail_tasks: task.detail_tasks.map(detail => ({
+            detailtitle: detail.title,
+            detailcontent: detail.description
+          }))
+        })));
+      } catch (error) {
+        console.error('データの取得に失敗しました', error);
+      }
+    };
+
+    catchdatas();
+  }, [id]);
+
+  const handleDelete = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (window.confirm("本当にこのガイドラインを削除しますか？")) {
+      try {
+        const response = await axios.delete(`http://127.0.0.1:3001/guidelines/${id}`,
+          { headers: { 'Authorization': `${accessToken}` } }
+        );
+        if (response.status === 200) {
+          alert("ガイドラインが正常に削除されました");
+        } else {
+          alert("ガイドラインの削除に失敗しました");
+        }
+      } catch (error) {
+        console.error('データの削除に失敗しました', error);
+        alert("ガイドラインの削除中にエラーが発生しました");
+      }
     }
   };
 
@@ -95,6 +136,7 @@ const Form = () => {
         />
       ) : (
         <form onSubmit={Submit}>
+          <button onClick={handleDelete} className='px-4 py-2 bg-red-500 border rounded-lg'>削除</button>
           <div id="open">
             <div className='w-full'>
               <label className='mt-4 font-bold mr-4'>タイトル</label>
