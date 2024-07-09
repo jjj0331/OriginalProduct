@@ -136,7 +136,9 @@ const Form = () => {
         />
       ) : (
         <form onSubmit={Submit}>
+
           <button onClick={handleDelete} className='px-4 py-2 bg-red-500 border rounded-lg'>削除</button>
+          
           <div id="open">
             <div className='w-full'>
               <label className='mt-4 font-bold mr-4'>タイトル</label>

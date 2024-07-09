@@ -22,13 +22,9 @@ const Header = () => {
           ホーム
       </Link>
 
-      <Link href="/form/new" className='hover:bg-selected-bg my-0 py-2 px-4 rounded-lg'>
-          記事の投稿
+      <Link href="/" className='hover:bg-selected-bg my-0 py-2 px-4 rounded-lg'>
+        はじめに
       </Link>
-
-        <a href="#info" className='hover:bg-selected-bg my-0 py-2 px-4 rounded-lg'>
-          はじめに
-        </a>
 
       {accessToken?(
         <Link href="/mypage"  className='border-2 rounded-lg my-0 py-2 px-4 bg-orange-400 font-bold flex items-center'>

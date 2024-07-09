@@ -3,7 +3,8 @@ import React, { useContext, useState } from 'react';
 import { TokenContext } from '../context/TokenContext';
 import  MyFavorites  from '../Components/My/Favorites/page';
 import Form from '../../app/Components/Form/page';
-const Mypage = () => {
+import MyGuidlines from '../Components/My/Guidlines/page';
+const Guidlines = () => {
   const { loginuser_id } = useContext(TokenContext);
   const [activeIndex, setActiveIndex] = useState(1);
 
@@ -41,7 +42,7 @@ const Mypage = () => {
         )}
         {activeIndex === 3 && (
           <div className='bg-blue-200 h-full'>
-            <h2>C画面</h2>
+            <MyGuidlines/>
           </div>
         )}
       </div>
@@ -49,4 +50,4 @@ const Mypage = () => {
   );
 }
 
-export default Mypage;
+export default Guidlines;

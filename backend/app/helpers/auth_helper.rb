@@ -1,4 +1,3 @@
-# app/helpers/auth_helper.rb
 module AuthHelper
   require 'jwt'
 
@@ -16,7 +15,8 @@ module AuthHelper
     def self.decode(token)
       begin
         body = JWT.decode(token, SECRET_KEY)[0]
-        HashWithIndifferentAccess.new(body)
+        # HashWithIndifferentAccess.new(body)
+        body.to_h.with_indifferent_access
       rescue JWT::ExpiredSignature
         nil  # トークンが期限切れの場合はnilを返す
       rescue JWT::DecodeError => e
@@ -29,7 +29,7 @@ module AuthHelper
   # 【ログインユーザ】
   def current_user
     # Authorizationヘッダーからトークンを取得
-    token = request.headers["Authorization"]&.split(" ")&.last
+    token = request.headers["Authorization"]&.split&.last
     
     if token
       # トークンをデコードしてユーザーIDを取得

@@ -21,6 +21,7 @@ const Login = () => {
       const { access_token } = response.data;
       setAccessToken(access_token);
       alert("ログインしました");
+      console.log(access_token);
       router.push('/');
     } catch (error) {
       console.error('ログインの際にエラーが発生しました', error);

@@ -34,6 +34,27 @@ class GuidelinesController < ApplicationController
     end
   end
 
+  def search
+    if params[:query].present?
+      @data = Guideline.includes(tasks: :detail_tasks).where('title LIKE ?', "%#{params[:query]}%")
+    else
+      @data = Guideline.limit(20)
+    end
+
+    render json: @data
+  end
+
+  def myguidelines
+    current_user
+    data=Guideline.includes(tasks: :detail_tasks).where(user_id: @current_user.id)
+
+    if data
+      render json: {data:data ,status: :ok}
+    else
+      render json: { error: '探しているガイドラインは存在しない' }, status: :not_found
+    end    
+  end  
+
 
 #ガイドラインの更新
 def update
