@@ -12,9 +12,7 @@ export default function MyFavorites() {
     const fetchFavorites = async () => {
       try {
         if (accessToken) {
-          const data = await fetchData('/current_user/favoriteguidelines', {
-            headers: { Authorization: ` ${accessToken}` }
-          });
+          const data = await fetchData('/current_user/favoriteguidelines', accessToken );
           setDatas(data.data); 
         } else {
           console.error('アクセストークンがありません。');

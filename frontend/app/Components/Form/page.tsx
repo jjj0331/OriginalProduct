@@ -1,31 +1,27 @@
 'use client';
+import React, { useContext, useState } from 'react';
 import Detailsform from '@/app/Components/Form/Detailtasks/page';
-import { useContext, useState } from 'react';
-import axios from "axios";
 import { useRouter } from 'next/navigation';
 import { TokenContext } from '../../context/TokenContext';
+import { postData } from '../../services/fetch';
+
 const Form = () => {
- 
   const { accessToken } = useContext(TokenContext);
   const [isDetailVisible, setDetailVisible] = useState(false);
   const [currentTodoIndex, setCurrentTodoIndex] = useState(null);
   const [todos, setTodos] = useState([{ title: '', content: '', detail_tasks: [] }]);
   const [guidelineTitle, setGuidelineTitle] = useState('');
   const [guidelineDescription, setGuidelineDescription] = useState('');
-  
-
   const router = useRouter();
-  
+
   const addTodos = () => {
-    const newTodo = { title: '', content: '', detail_tasks: [] };
-    setTodos([...todos, newTodo]);
+    setTodos([...todos, { title: '', content: '', detail_tasks: [] }]);
   };
-  
+
   const removeItem = (index) => {
-    const newTodos = todos.filter((todo, i) => i !== index);
-    setTodos(newTodos);
+    setTodos(todos.filter((_, i) => i !== index));
   };
-  
+
   const showDetail = (index) => {
     setCurrentTodoIndex(index);
     setDetailVisible(true);
@@ -52,15 +48,14 @@ const Form = () => {
     const newTodos = [...todos];
     newTodos[index].detail_tasks = details;
     setTodos(newTodos);
-    console.log(todos);
   };
 
-  const Submit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const Submit = async (e) => {
     e.preventDefault();
     try {
       const guideline = {
-        title: guidelineTitle, 
-        description: guidelineDescription, 
+        title: guidelineTitle,
+        description: guidelineDescription,
         tasks_attributes: todos.map(todo => ({
           title: todo.title,
           description: todo.content,
@@ -71,15 +66,11 @@ const Form = () => {
         }))
       };
 
-      const response = await axios.post('http://127.0.0.1:3001/guidelines/new', 
-        { guideline },
-        {headers: {'Authorization': `${accessToken}`}} 
-      );
+      await postData('/guidelines/new', { guideline }, accessToken);  // 
       alert("投稿できました");
       router.push('/');
-
     } catch (error) {
-      console.error('投稿に失敗しました', error);
+      console.error('投稿に失敗しました', error.response?.data?.message || error.message);
     }
   };
 
@@ -93,7 +84,7 @@ const Form = () => {
           updateTodoDetails={updateTodoDetails}
         />
       ) : (
-        <form>
+        <form onSubmit={Submit}>
           <div id="open">
             <div className='w-full'>
               <label className='mt-4 font-bold mr-4'>タイトル</label>
@@ -117,7 +108,6 @@ const Form = () => {
 
             <div className='w-full mt-4'>
               <label className='mt-4 font-bold mr-4'>Todolist</label>
-
               {todos.map((todo, index) => (
                 <div className="w-full" id="target" key={index}>
                   <div className="flex items-center gap-1 mb-2 mt-1">
@@ -128,10 +118,18 @@ const Form = () => {
                       value={todo.title}
                       onChange={(e) => handleTitleChange(index, e.target.value)}
                     />
-                    <button onClick={() => showDetail(index)} className='px-2 py-2 border-2 rounded-lg bg-blue-700 text-white font-bold'>
+                    <button 
+                      type="button" 
+                      onClick={() => showDetail(index)} 
+                      className='px-2 py-2 border-2 rounded-lg bg-blue-700 text-white font-bold'
+                    >
                       詳細
                     </button>
-                    <button onClick={() => removeItem(index)} className='px-2 py-2 border-2 rounded-lg bg-red-700 text-white font-bold'>
+                    <button 
+                      type="button" 
+                      onClick={() => removeItem(index)} 
+                      className='px-2 py-2 border-2 rounded-lg bg-red-700 text-white font-bold'
+                    >
                       削除
                     </button>
                   </div>
@@ -139,11 +137,18 @@ const Form = () => {
               ))}
             </div>
 
-            <button onClick={addTodos} type="button" className='mt-1 font-bold px-2 py-2 rounded-md bg-blue-700 text-white'>
+            <button 
+              type="button" 
+              onClick={addTodos} 
+              className='mt-1 font-bold px-2 py-2 rounded-md bg-blue-700 text-white'
+            >
               追加
             </button>
 
-            <button onClick={Submit} type="submit" className='px-2 py-2 border-2 rounded-lg bg-blue-700 text-white font-bold mt-1'>
+            <button 
+              type="submit" 
+              className='px-2 py-2 border-2 rounded-lg bg-blue-700 text-white font-bold mt-1'
+            >
               登録
             </button>
           </div>

@@ -5,9 +5,12 @@ const apiClient = axios.create({
   timeout: 1000,
 });
 
-export const fetchData = async (endpoint, params = {}) => {
+export const fetchData = async (endpoint, token = null) => {
   try {
-    const response = await apiClient.get(endpoint, { params });
+    const config = token
+      ? { headers: { 'Authorization': `Bearer ${token}` } }
+      : {};
+    const response = await apiClient.get(endpoint, config);
     return response.data;
   } catch (error) {
     console.error(`Error fetching data from ${endpoint}:`, error);
@@ -15,9 +18,12 @@ export const fetchData = async (endpoint, params = {}) => {
   }
 };
 
-export const postData = async (endpoint, data) => {
+export const postData = async (endpoint, data = {}, token = null) => {
   try {
-    const response = await apiClient.post(endpoint, data);
+    const config = token
+      ? { headers: { 'Authorization': `Bearer ${token}` } }
+      : {};
+    const response = await apiClient.post(endpoint, data, config);
     return response.data;
   } catch (error) {
     console.error(`Error posting data to ${endpoint}:`, error);

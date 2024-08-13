@@ -1,38 +1,37 @@
 'use client';
-import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { TokenContext } from '../../context/TokenContext';
+import { fetchData, postData } from '../../services/fetch'; // 共通のAPIクライアントを使用
 
 const Carddetail = () => {
   const { accessToken } = useContext(TokenContext);
-  const [datas, setDatas] = useState([]);
+  const [datas, setDatas] = useState({});
   const { id } = useParams();
 
-  const AddMyFavarite = async () => {
+  const AddMyFavorite = async () => {
     try {
-      const response = await axios.post(`http://127.0.0.1:3001/userguidelines/${id}`, {}, {
-        headers: { 'Authorization': `${accessToken}` }
-      });
-      alert("成功");
+      await postData(`/userguidelines/${id}`,{} ,accessToken);
+      alert("Mylistに追加しました");
     } catch (error) {
-      alert("失敗");
-      console.error('データ取得の際にエラーが発生しました', error);
+      alert("Mylistへの追加に失敗しました");
+      console.error('Mylistへの追加中にエラーが発生しました', error.response?.data?.message || error.message);
     }
   };
 
   useEffect(() => {
-    const catchdatas = async () => {
+    const fetchGuidelineDetails = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:3001/guidelines/${id}`);
-        setDatas(response.data);
-        console.log(response.data);
+        const data = await fetchData(`/guidelines/${id}`);
+        setDatas(data);
+        console.log(data);
       } catch (error) {
-        console.error('データ取得の際にエラーが発生しました', error);
+        console.error('ガイドラインの取得中にエラーが発生しました', error.response?.data?.message || error.message);
       }
-    }
-    catchdatas();
+    };
+
+    fetchGuidelineDetails();
   }, [id]);
 
   return (
@@ -55,7 +54,7 @@ const Carddetail = () => {
         </button>
       </Link>
 
-      <button onClick={AddMyFavarite} className='ml-4 mt-6 px-4 py-2 bg-orange-300 border rounded-lg'>
+      <button onClick={AddMyFavorite} className='ml-4 mt-6 px-4 py-2 bg-orange-300 border rounded-lg'>
         Mylistに追加
       </button>
     </div>
