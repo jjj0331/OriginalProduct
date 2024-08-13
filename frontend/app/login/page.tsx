@@ -1,34 +1,45 @@
 "use client";
 import React, { useContext, useState } from 'react';
-import axios from 'axios';
 import { TokenContext } from '../context/TokenContext';
 import { useRouter } from 'next/navigation';
+import { postData } from '../services/fetch';
 
 const Login = () => {
   const { setAccessToken } = useContext(TokenContext);
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleAuth = async (endpoint, successMessage, failCallback = null) => {
     try {
-      const response = await axios.post('http://127.0.0.1:3001/login', 
-        { email, password }, 
-  
-      );
-      const { access_token } = response.data;
+      const response = await postData(endpoint, { user: { username, password } });
+      const { access_token } = response;
       setAccessToken(access_token);
-      alert("ログインしました");
-      console.log(access_token);
+      alert(successMessage);
       router.push('/');
     } catch (error) {
-      console.error('ログインの際にエラーが発生しました', error);
-      if (axios.isAxiosError(error)) {
-        console.error('AxiosError message:', error.message);
+      if (error.response?.status === 401 && failCallback) {
+        failCallback();
+      } else {
+        console.error('エラーが発生しました:', error.message);
       }
     }
+  };
+
+  const handleLogin = () => {
+    handleAuth('/login', 'ログインしました', () => {
+      alert('ユーザーが存在しません。新規登録を行います。');
+      handleSignup();
+    });
+  };
+
+  const handleSignup = () => {
+    handleAuth('/register', '新規登録が完了しました');
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleLogin();
   };
 
   return (
@@ -40,15 +51,15 @@ const Login = () => {
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Email</label>
+              <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">Username</label>
               <div className="mt-2">
                 <input
-                  id="email"
-                  value={email}
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  onChange={(e) => setEmail(e.target.value)}
+                  id="username"
+                  value={username}
+                  name="username"
+                  type="text"
+                  autoComplete="username"
+                  onChange={(e) => setUsername(e.target.value)}
                   required
                   className="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
@@ -57,9 +68,6 @@ const Login = () => {
             <div>
               <div className="flex items-center justify-between">
                 <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
-                <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-300">パスワードを忘れた場合?</a>
-                </div>
               </div>
               <div className="mt-2">
                 <input
@@ -75,12 +83,9 @@ const Login = () => {
               </div>
             </div>
             <div>
-              <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Sign in</button>
+              <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 mt-6 focus-visible:outline-indigo-600">Sign in/新規登録</button>
             </div>
           </form>
-          <div className="text-sm w-full text-center mt-2">
-            <a href="/Login/New" className="font-semibold text-indigo-600 hover:text-indigo-300">新規登録</a>
-          </div>
         </div>
       </div>
     </div>

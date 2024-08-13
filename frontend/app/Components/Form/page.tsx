@@ -7,7 +7,6 @@ import { TokenContext } from '../../context/TokenContext';
 const Form = () => {
  
   const { accessToken } = useContext(TokenContext);
-  console.log(accessToken);
   const [isDetailVisible, setDetailVisible] = useState(false);
   const [currentTodoIndex, setCurrentTodoIndex] = useState(null);
   const [todos, setTodos] = useState([{ title: '', content: '', detail_tasks: [] }]);
@@ -94,7 +93,7 @@ const Form = () => {
           updateTodoDetails={updateTodoDetails}
         />
       ) : (
-        <form onSubmit={Submit}>
+        <form>
           <div id="open">
             <div className='w-full'>
               <label className='mt-4 font-bold mr-4'>タイトル</label>
@@ -144,7 +143,7 @@ const Form = () => {
               追加
             </button>
 
-            <button type="submit" className='px-2 py-2 border-2 rounded-lg bg-blue-700 text-white font-bold mt-1'>
+            <button onClick={Submit} type="submit" className='px-2 py-2 border-2 rounded-lg bg-blue-700 text-white font-bold mt-1'>
               登録
             </button>
           </div>

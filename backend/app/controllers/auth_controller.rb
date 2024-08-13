@@ -3,12 +3,28 @@ class AuthController < ApplicationController
   include AuthHelper
 
   #登録
-  def register
+  def create
     @user = User.new(user_params)
+
     if @user.save
-      render json: { message: 'ユーザを作成しました' }, status: :created
+      access_token = JsonWebToken.create_token(@user.id)
+      refresh_token = JsonWebToken.create_token(@user.id, 7.days.from_now)
+      render json: { access_token: access_token, refresh_token: refresh_token }, status: :ok
     else
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  # ログイン
+  def login
+    user = User.find_by(username: params[:user][:username])
+    
+    if user && user.authenticate(params[:user][:password])
+      access_token = JsonWebToken.create_token(user.id)
+      refresh_token = JsonWebToken.create_token(user.id, 7.days.from_now)
+      render json: { access_token: access_token, refresh_token: refresh_token }, status: :ok
+    else
+      render json: { error: 'Invalid username or password' }, status: :unauthorized
     end
   end
 
@@ -38,21 +54,9 @@ class AuthController < ApplicationController
     end
   end
 
-  def login
-    @user = User.find_by(email: params[:email])
-    if @user && @user.authenticate(params[:password])
-      access_token = JsonWebToken.create_token(@user.id)
-      refresh_token = JsonWebToken.create_token(@user.id, 7.days.from_now)      
-      render json: { access_token: access_token, refresh_token: refresh_token }, status: :ok
-    else
-      render json: { errors: 'Invalid email or password' }, status: :unauthorized
-    end
-  end
-
-
   private
   #パラメータ制御
   def user_params
-    params.require(:user).permit(:username, :email, :password, :password_confirmation)
+    params.require(:user).permit(:username,  :password, :password_confirmation)
   end
 end

@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   #【ユーザ】
-  post 'register', to: 'auth#register'
-  get  'user/:id', to: 'auth#show'
+  post 'register', to: 'auth#create'
   post 'login',    to: 'auth#login'
+  get  'user/:id', to: 'auth#show'
   get  'login',    to: 'auth#showloginuser'
 
   #【ガイドライン】

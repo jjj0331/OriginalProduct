@@ -2,13 +2,10 @@
 import React, { useContext } from 'react'
 import Link from 'next/link';
 import { TokenContext } from './context/TokenContext';
-import { useParams } from 'next/navigation';
+
 
 const Header = () => {
   const { accessToken } = useContext(TokenContext);
-
-    //URLからidを取得 
-    const { id } = useParams();
 
   return (
     <div className='flex justify-between items-center border-b-2 

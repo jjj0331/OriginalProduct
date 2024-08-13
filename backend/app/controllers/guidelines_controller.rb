@@ -101,14 +101,6 @@ def destroy
     render json: { message: 'ログインしてください' }, status: :unauthorized
   end
 end
-
-
-private
-
-def guideline_params
-  params.require(:guideline).permit(:title, :description, tasks_attributes: [:id, :title, :description, detail_tasks_attributes: [:id, :title, :description]])
-end
-
   
   #パラメータ制御
   private

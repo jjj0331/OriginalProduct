@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useState } from 'react';
-import axios from 'axios';
+import { fetchData } from '../services/fetch'; 
 export const TokenContext = createContext();
 
 export const TokenProvider = ({ children }) => {
@@ -8,9 +8,9 @@ export const TokenProvider = ({ children }) => {
   
   const loginuser_id= async()=>{
     try{
-      const response =await axios.get('http://127.0.0.1:3001/login',
-        {headers: {'Authorization': `${accessToken}`}}
-      );
+      const response = await fetchData('/login', {
+        headers: { Authorization: `${accessToken}` }
+      });
       const user_id = response.data.user_id;
       return user_id;
     }catch(error){

@@ -18,12 +18,17 @@ const Form = () => {
   const router = useRouter();
 
   const addTodos = () => {
-    const newTodo = { title: '', content: '', detail_tasks: [] };
+    const newTodo = { title: '', content: '', detail_tasks: [], _destroy: false };
     setTodos([...todos, newTodo]);
   };
 
   const removeItem = (index) => {
-    const newTodos = todos.filter((todo, i) => i !== index);
+    const newTodos = [...todos];
+    if (newTodos[index].id) {
+      newTodos[index]._destroy = true; // Mark the item for deletion
+    } else {
+      newTodos.splice(index, 1); // Remove the item if it doesn't have an ID (new item not yet saved)
+    }
     setTodos(newTodos);
   };
 
@@ -62,11 +67,15 @@ const Form = () => {
         title: guidelineTitle, 
         description: guidelineDescription, 
         tasks_attributes: todos.map(todo => ({
+          id: todo.id, // Include ID for existing items
           title: todo.title,
           description: todo.content,
+          _destroy: todo._destroy, // Include _destroy flag
           detail_tasks_attributes: todo.detail_tasks.map(detail => ({
+            id: detail.id, // Include ID for existing items
             title: detail.detailtitle,
             description: detail.detailcontent,
+            _destroy: detail._destroy // Include _destroy flag
           }))
         }))
       };
@@ -91,11 +100,15 @@ const Form = () => {
         setGuidelineTitle(guidelineData.title);
         setGuidelineDescription(guidelineData.description);
         setTodos(guidelineData.tasks.map(task => ({
+          id: task.id,
           title: task.title,
           content: task.description,
+          _destroy: false, // Initialize _destroy flag
           detail_tasks: task.detail_tasks.map(detail => ({
+            id: detail.id,
             detailtitle: detail.title,
-            detailcontent: detail.description
+            detailcontent: detail.description,
+            _destroy: false // Initialize _destroy flag
           }))
         })));
       } catch (error) {
@@ -115,6 +128,7 @@ const Form = () => {
         );
         if (response.status === 200) {
           alert("ガイドラインが正常に削除されました");
+          router.push('/');
         } else {
           alert("ガイドラインの削除に失敗しました");
         }
@@ -135,9 +149,9 @@ const Form = () => {
           updateTodoDetails={updateTodoDetails}
         />
       ) : (
-        <form onSubmit={Submit}>
+        <form >
 
-          <button onClick={handleDelete} className='px-4 py-2 bg-red-500 border rounded-lg'>削除</button>
+          <button type="button" onClick={handleDelete} className='px-4 py-2 bg-red-500 border rounded-lg'>削除</button>
           
           <div id="open">
             <div className='w-full'>
@@ -163,7 +177,7 @@ const Form = () => {
             <div className='w-full mt-4'>
               <label className='mt-4 font-bold mr-4'>Todolist</label>
 
-              {todos.map((todo, index) => (
+              {todos.filter(todo => !todo._destroy).map((todo, index) => (
                 <div className="w-full" id="target" key={index}>
                   <div className="flex items-center gap-1 mb-2 mt-1">
                     <i>{index}</i>
@@ -173,10 +187,10 @@ const Form = () => {
                       value={todo.title}
                       onChange={(e) => handleTitleChange(index, e.target.value)}
                     />
-                    <button onClick={() => showDetail(index)} className='px-2 py-2 border-2 rounded-lg bg-blue-700 text-white font-bold'>
+                    <button type="button" onClick={() => showDetail(index)} className='px-2 py-2 border-2 rounded-lg bg-blue-700 text-white font-bold'>
                       詳細
                     </button>
-                    <button onClick={() => removeItem(index)} className='px-2 py-2 border-2 rounded-lg bg-red-700 text-white font-bold'>
+                    <button type="button" onClick={() => removeItem(index)} className='px-2 py-2 border-2 rounded-lg bg-red-700 text-white font-bold'>
                       削除
                     </button>
                   </div>
@@ -184,11 +198,11 @@ const Form = () => {
               ))}
             </div>
 
-            <button onClick={addTodos} type="button" className='mt-1 font-bold px-2 py-2 rounded-md bg-blue-700 text-white'>
+            <button type="button" onClick={addTodos} className='mt-1 font-bold px-2 py-2 rounded-md bg-blue-700 text-white'>
               追加
             </button>
 
-            <button type="submit" className='px-2 py-2 border-2 rounded-lg bg-blue-700 text-white font-bold mt-1'>
+            <button onClick={Submit} type="submit" className='px-2 py-2 border-2 rounded-lg bg-blue-700 text-white font-bold mt-1'>
               登録
             </button>
           </div>
