@@ -30,3 +30,36 @@ export const postData = async (endpoint, data = {}, token = null) => {
     throw error;
   }
 };
+
+// ChatGPT APIと通信する関数
+export const sendToChatGPT = async (inputText, detailTaskTitle) => {
+  const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
+  
+  try {
+    const response = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
+      {
+        model: 'gpt-3.5-turbo', // 正しいモデル名を指定
+        messages: [
+          { role: 'system', content: 'あなたは日本語のみでコミュニケーションを行います。' },
+          { role: 'user', content: `
+            ${detailTaskTitle}について勉強しています。
+            以下の内容が正しいのか判断し、正しい場合は「1」のみを回答して。【回答】${inputText}` }
+        ],
+        max_tokens: 100,
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    return response.data.choices[0].message.content.trim(); // 正しくレスポンスを返す
+  } catch (error) {
+    console.error('Error in sendToChatGPT:', error); // error全体を表示
+    console.error('Response data:', error.response?.data); // responseの中身を確認
+    throw error;
+  }
+};
