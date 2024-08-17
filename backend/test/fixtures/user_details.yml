@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  guideline: one
+  task: one
+  detail: one
+  status: false
+
+two:
+  user: two
+  guideline: two
+  task: two
+  detail: two
+  status: false
