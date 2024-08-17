@@ -1,10 +1,10 @@
 'use client';
 import Detailsform from '@/app/Components/Form/Detailtasks/page';
 import { useContext, useEffect, useState } from 'react';
-import axios from "axios";
 import { useRouter } from 'next/navigation';
 import { TokenContext } from '../../../context/TokenContext';
 import { useParams } from 'next/navigation';
+import { fetchData, postData } from '@/app/services/fetch';
 
 const Form = () => {
   const { accessToken } = useContext(TokenContext);
@@ -80,10 +80,7 @@ const Form = () => {
         }))
       };
 
-      const response = await axios.post(`http://127.0.0.1:3001/guidelines/${id}/edit`, 
-        { guideline },
-        { headers: { 'Authorization': `${accessToken}` } }
-      );
+      const response = await postData(`/guidelines/${id}/edit`, { guideline }, accessToken);
       alert("更新できました");
       router.push('/');
 
@@ -95,8 +92,7 @@ const Form = () => {
   useEffect(() => {
     const catchdatas = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:3001/guidelines/${id}`);
-        const guidelineData = response.data;
+        const guidelineData = await fetchData(`/guidelines/${id}`, accessToken);
         setGuidelineTitle(guidelineData.title);
         setGuidelineDescription(guidelineData.description);
         setTodos(guidelineData.tasks.map(task => ({
@@ -123,9 +119,7 @@ const Form = () => {
     e.preventDefault();
     if (window.confirm("本当にこのガイドラインを削除しますか？")) {
       try {
-        const response = await axios.delete(`http://127.0.0.1:3001/guidelines/${id}`,
-          { headers: { 'Authorization': `${accessToken}` } }
-        );
+        const response = await postData(`/guidelines/${id}`, {}, accessToken);
         if (response.status === 200) {
           alert("ガイドラインが正常に削除されました");
           router.push('/');
