@@ -12,8 +12,10 @@ export default function MyFavorites() {
     const fetchFavorites = async () => {
       try {
         if (accessToken) {
-          const data = await fetchData('/current_user/favoriteguidelines', accessToken );
-          setDatas(data.data); 
+          
+          const data = await fetchData('/current_user/favoriteguidelines', {}, accessToken );
+          console.log('Fetched data:', data);
+          setDatas(data); 
         } else {
           console.error('アクセストークンがありません。');
         }
@@ -21,7 +23,7 @@ export default function MyFavorites() {
         console.error('ユーザーのお気に入りデータの取得中にエラーが発生しました', error);
       }
     };
-
+  
     fetchFavorites();
   }, [accessToken]);
 

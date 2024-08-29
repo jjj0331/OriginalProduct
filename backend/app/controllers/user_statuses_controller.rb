@@ -31,22 +31,27 @@ class UserStatusesController < ApplicationController
       end
   
       render json: { message: '登録しました' }, status: :created
+    rescue ActiveRecord::RecordNotUnique => e
+      # 一意制約エラーが発生した場合
+      render json: { error: 'すでに登録されています' }, status: :unprocessable_entity
     rescue StandardError => e
       Rails.logger.error("Transaction failed: #{e.message}")
       render json: { error: e.message }, status: :unprocessable_entity
     end
   end
+  
 
   def show_user_status
     current_user
     data = UserStatus.includes(:guideline).where(user_id: @current_user.id).map(&:guideline).uniq
-
-
+    
     if data.blank? || @current_user.nil?
       render json: { error: 'ユーザーまたはガイドラインが見つかりません' }, status: :unprocessable_entity
     else
-      render json: { data: data }, status: :ok
+      render json: data, status: :ok
     end
-  end  
+  end
+  
+  
 
 end

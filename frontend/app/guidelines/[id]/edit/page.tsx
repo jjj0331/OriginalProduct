@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { TokenContext } from '../../../context/TokenContext';
 import { useParams } from 'next/navigation';
-import { fetchData, postData } from '@/app/services/fetch';
+import { fetchData, postData,deleteData  } from '@/app/services/fetch';
 
 const Form = () => {
   const { accessToken } = useContext(TokenContext);
@@ -62,6 +62,22 @@ const Form = () => {
 
   const Submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+            // バリデーションチェック
+            if (!guidelineTitle.trim()) {
+              alert("ガイドラインのタイトルを入力してください。");
+              return;
+          }
+      
+          if (!guidelineDescription.trim()) {
+              alert("ガイドラインの概要を入力してください。");
+              return;
+          }
+      
+          if (todos.some(todo => !todo.title.trim())) {
+              alert("すべてのTodolistにタイトルを入力してください。");
+              return;
+          }
     try {
       const guideline = {
         title: guidelineTitle, 
@@ -80,7 +96,7 @@ const Form = () => {
         }))
       };
 
-      const response = await postData(`/guidelines/${id}/edit`, { guideline }, accessToken);
+      const response = await postData(`/guidelines/${id}/edit`,  guideline , accessToken);
       alert("更新できました");
       router.push('/');
 
@@ -92,7 +108,7 @@ const Form = () => {
   useEffect(() => {
     const catchdatas = async () => {
       try {
-        const guidelineData = await fetchData(`/guidelines/${id}`, accessToken);
+        const guidelineData = await fetchData(`/guidelines/${id}`, {},accessToken);
         setGuidelineTitle(guidelineData.title);
         setGuidelineDescription(guidelineData.description);
         setTodos(guidelineData.tasks.map(task => ({
@@ -119,8 +135,9 @@ const Form = () => {
     e.preventDefault();
     if (window.confirm("本当にこのガイドラインを削除しますか？")) {
       try {
-        const response = await postData(`/guidelines/${id}`, {}, accessToken);
-        if (response.status === 200) {
+        const response = await deleteData(`/guidelines/${id}`, accessToken);
+        console.log('Delete response:', response);  // 追加してレスポンスを確認
+        if (response.status === 200 || response.message === "Guideline successfully deleted") {  // ステータスコードか、成功メッセージを確認
           alert("ガイドラインが正常に削除されました");
           router.push('/');
         } else {

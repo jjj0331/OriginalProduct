@@ -28,6 +28,7 @@ export default function Home() {
 
   useEffect(() => {
     if (inputdata) {
+
       handleApiRequest('/guidelines/search', { query: inputdata });
     } else {
       handleApiRequest('/guidelines/all');

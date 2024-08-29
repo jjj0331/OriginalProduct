@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_13_093223) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_26_130748) do
   create_table "detail_tasks", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -49,6 +49,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_13_093223) do
     t.index ["detail_task_id"], name: "index_user_statuses_on_detail_task_id"
     t.index ["guideline_id"], name: "index_user_statuses_on_guideline_id"
     t.index ["task_id"], name: "index_user_statuses_on_task_id"
+    t.index ["user_id", "guideline_id", "task_id", "detail_task_id"], name: "index_user_statuses", unique: true
     t.index ["user_id"], name: "index_user_statuses_on_user_id"
   end
 

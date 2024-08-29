@@ -52,6 +52,23 @@ const Form = () => {
 
   const Submit = async (e) => {
     e.preventDefault();
+
+        // バリデーションチェック
+        if (!guidelineTitle.trim()) {
+          alert("ガイドラインのタイトルを入力してください。");
+          return;
+      }
+  
+      if (!guidelineDescription.trim()) {
+          alert("ガイドラインの概要を入力してください。");
+          return;
+      }
+  
+      if (todos.some(todo => !todo.title.trim())) {
+          alert("すべてのTodolistにタイトルを入力してください。");
+          return;
+      }
+      
     try {
       const guideline = {
         title: guidelineTitle,

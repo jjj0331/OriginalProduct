@@ -12,7 +12,8 @@ export default function MyGuidlines() {
     const fetchGuidelines = async () => {
       try {
         if (accessToken) {
-          const data = await fetchData('/current_user/guidelines',accessToken);
+          const data = await fetchData('/current_user/guidelines',{ }
+            ,accessToken);
           setDatas(data.data); 
           console.log(data);
         } else {

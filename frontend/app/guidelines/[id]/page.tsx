@@ -12,10 +12,14 @@ const Carddetail = () => {
 
   const AddMyFavorite = async () => {
     try {
-      await postData(`/userguidelines/${id}`,{} ,accessToken);
+      await postData(`/userguidelines/${id}`, {} ,accessToken);
       alert("Mylistに追加しました");
     } catch (error) {
-      alert("Mylistへの追加に失敗しました");
+      if (error.response?.status === 422 && error.response?.data?.error === 'すでに登録されています') {
+        alert("すでに登録されています");
+      } else {
+        alert("Mylistへの追加に失敗しました");
+      }
       console.error('Mylistへの追加中にエラーが発生しました', error.response?.data?.message || error.message);
     }
   };
