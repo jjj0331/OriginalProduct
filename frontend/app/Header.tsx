@@ -1,48 +1,63 @@
 "use client";
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react';
 import Link from 'next/link';
 import { TokenContext } from './context/TokenContext';
 
-
 const Header = () => {
   const { accessToken } = useContext(TokenContext);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
 
   return (
-    <div className='flex justify-between items-center border-b-2 
-    border-black box-content py-2 h-10 px-4 '>
-      <div className='text-2xl font-bold'>
-          みんなのガイドライン
+    <div className='flex justify-between items-center border-b-2 border-black py-2 h-16 px-4'>
+      <div className='text-xl sm:text-2xl font-bold'>
+        みんなのガイドライン
       </div>
       
-      <div className='space-x-5 flex'>
-      <Link href="/"className='hover:bg-selected-bg my-0 py-2 px-4 rounded-lg'>
+      <div className='sm:hidden'>
+        <button onClick={toggleMenu} className="focus:outline-none">
+          {isOpen ? (
+            <span className="text-2xl text-gray-900 dark:text-white">×</span>
+          ) : (
+            <img
+              src="/bars_24.svg"
+              alt="Menu"
+              className="w-6 h-6"
+            />
+          )}
+        </button>
+      </div>
+      
+      <div className={`absolute top-16 left-0 w-full z-50 sm:relative sm:top-0 sm:left-0 sm:w-auto flex-col sm:flex sm:flex-row sm:items-center sm:space-x-5 bg-white dark:bg-gray-800 sm:bg-transparent ${isOpen ? 'flex bg-gray-200' : 'hidden'}`}>
+        <Link href="/" className='block sm:inline-block hover:bg-selected-bg my-2 sm:my-0 py-2 px-4 rounded-lg' onClick={closeMenu}>
           ホーム
-      </Link>
+        </Link>
 
-      <Link href="/" className='hover:bg-selected-bg my-0 py-2 px-4 rounded-lg'>
-        はじめに
-      </Link>
+        <Link href="/" className='block sm:inline-block hover:bg-selected-bg my-2 sm:my-0 py-2 px-4 rounded-lg' onClick={closeMenu}>
+          はじめに
+        </Link>
 
-      {accessToken?(
-        <Link href="/mypage"  className='border-2 rounded-lg my-0 py-2 px-4 bg-orange-400 font-bold flex items-center'>
-          <button className='flex items-center'>
+        {accessToken ? (
+          <Link href="/mypage" className='block sm:inline-block border-2 rounded-lg my-2 sm:my-0 py-2 px-4 bg-orange-400 font-bold flex items-center' onClick={closeMenu}>
             <i className="fa-solid fa-user"></i>
             <span className='ml-2'>MyPage</span>
-          </button>
-        </Link>
-      ):(
-      <a href="/login" className='border-2 rounded-lg hover:bg-selected-bg my-0 py-2 px-4 font-bold flex items-center'>
-        <button className='flex items-center'>
-          <i className="fa-solid fa-user"></i>
-          <span className='ml-2'>ログイン</span>
-        </button>
-      </a>
-      )}
-
+          </Link>
+        ) : (
+          <Link href="/login" className='block sm:inline-block border-2 rounded-lg hover:bg-selected-bg my-2 sm:my-0 py-2 px-4 font-bold flex items-center' onClick={closeMenu}>
+            <i className="fa-solid fa-user"></i>
+            <span className='ml-2'>ログイン</span>
+          </Link>
+        )}
       </div>
-
     </div>
-  )
+  );
 }
 
-export default Header
+export default Header;

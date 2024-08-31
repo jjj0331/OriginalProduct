@@ -53,22 +53,22 @@ const Form = () => {
   const Submit = async (e) => {
     e.preventDefault();
 
-        // バリデーションチェック
-        if (!guidelineTitle.trim()) {
-          alert("ガイドラインのタイトルを入力してください。");
-          return;
-      }
-  
-      if (!guidelineDescription.trim()) {
-          alert("ガイドラインの概要を入力してください。");
-          return;
-      }
-  
-      if (todos.some(todo => !todo.title.trim())) {
-          alert("すべてのTodolistにタイトルを入力してください。");
-          return;
-      }
-      
+    // バリデーションチェック
+    if (!guidelineTitle.trim()) {
+      alert("ガイドラインのタイトルを入力してください。");
+      return;
+    }
+
+    if (!guidelineDescription.trim()) {
+      alert("ガイドラインの概要を入力してください。");
+      return;
+    }
+
+    if (todos.some(todo => !todo.title.trim())) {
+      alert("すべてのTodolistにタイトルを入力してください。");
+      return;
+    }
+
     try {
       const guideline = {
         title: guidelineTitle,
@@ -83,7 +83,7 @@ const Form = () => {
         }))
       };
 
-      await postData('/guidelines/new', { guideline }, accessToken);  // 
+      await postData('/guidelines/new', { guideline }, accessToken);  
       alert("投稿できました");
       router.push('/');
     } catch (error) {
@@ -92,7 +92,7 @@ const Form = () => {
   };
 
   return (
-    <div className='mx-auto w-6/12 mt-6'>
+    <div className='mx-auto w-full sm:w-10/12 md:w-8/12 lg:w-6/12 xl:w-5/12 mt-6'>
       {isDetailVisible && currentTodoIndex !== null ? (
         <Detailsform
           closeDetail={closeDetail}
@@ -124,28 +124,27 @@ const Form = () => {
             </div>
 
             <div className='w-full mt-4'>
-              <label className='mt-4 font-bold mr-4'>Todolist</label>
+              <label className='mt-4 font-bold mr-4'>タスク</label>
               {todos.map((todo, index) => (
                 <div className="w-full" id="target" key={index}>
-                  <div className="flex items-center gap-1 mb-2 mt-1">
-                    <i>{index}</i>
+                  <div className="flex items-center gap-2 mb-2 mt-1">
                     <input 
                       type="text" 
-                      className="w-10/12 border py-2 rounded-lg"
+                      className="flex-grow border py-2 rounded-lg"
                       value={todo.title}
                       onChange={(e) => handleTitleChange(index, e.target.value)}
                     />
                     <button 
                       type="button" 
                       onClick={() => showDetail(index)} 
-                      className='px-2 py-2 border-2 rounded-lg bg-blue-700 text-white font-bold'
+                      className='flex-shrink-0 px-2 py-2 border-2 rounded-lg bg-blue-700 text-white font-bold'
                     >
                       詳細
                     </button>
                     <button 
                       type="button" 
                       onClick={() => removeItem(index)} 
-                      className='px-2 py-2 border-2 rounded-lg bg-red-700 text-white font-bold'
+                      className='flex-shrink-0 px-2 py-2 border-2 rounded-lg bg-red-700 text-white font-bold'
                     >
                       削除
                     </button>
@@ -159,12 +158,15 @@ const Form = () => {
               onClick={addTodos} 
               className='mt-1 font-bold px-2 py-2 rounded-md bg-blue-700 text-white'
             >
-              追加
+              ＋
             </button>
+          </div>
 
+          {/* 登録ボタンをフォームの最後に配置 */}
+          <div className='flex justify-center mt-6'>
             <button 
               type="submit" 
-              className='px-2 py-2 border-2 rounded-lg bg-blue-700 text-white font-bold mt-1'
+              className='px-6 py-3 border-2 rounded-lg bg-green-600 text-white font-bold'
             >
               登録
             </button>

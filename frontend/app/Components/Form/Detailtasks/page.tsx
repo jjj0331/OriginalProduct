@@ -5,7 +5,7 @@ const Detailsform = ({ closeDetail, todo, index, updateTodoDetails }) => {
   const [items, setItems] = useState([{ detailtitle: '', detailcontent: '', _destroy: false }]);
 
   useEffect(() => {
-    if (todo && todo.detail_tasks) {
+    if (todo && todo.detail_tasks && todo.detail_tasks.length > 0) {
       setItems(todo.detail_tasks.map(detail => ({
         ...detail,
         _destroy: false, 
@@ -41,37 +41,37 @@ const Detailsform = ({ closeDetail, todo, index, updateTodoDetails }) => {
   };
 
   const handleSaveAndClose = () => {
-    updateTodoDetails(index, items);
-    closeDetail();
+    updateTodoDetails(index, items); // 入力内容を保存
+    closeDetail(); // フォームを閉じる
   };
 
   return (
-    <div className='fixed inset-0 bg-main_color overflow-y-auto'>
-      <form className="w-2/3 mx-auto mt-16 border-2 border-black rounded shadow-lg px-4 py-4">
-        <h1>詳細作成フォーム</h1>
+    <div className='fixed inset-0 bg-gray-800 bg-opacity-75 overflow-y-auto flex justify-center items-center'>
+      <form className="bg-white w-full max-w-lg mx-auto mt-16 border-2 border-gray-300 rounded shadow-lg px-6 py-8">
+        <h1 className="text-2xl font-bold text-gray-700 mb-6 text-center">クエスト作成フォーム</h1>
         {items.filter(item => !item._destroy).map((item, idx) => (
-          <div className='border border-red-700' key={idx}>
-            <div className="mb-4 flex justify-center w-full space-x-2 items-center">
-              <label className="w-1/6 block text-gray-700 text-right">詳細タイトル</label>
+          <div className='mb-4' key={idx}>
+            <div className="mb-4 flex items-center">
+              <label className="w-1/4 block text-gray-700 text-right mr-2">クエスト</label>
               <input 
                 type="text" 
                 name="detailtitle" 
-                className="w-3/4 border px-4 py-2"
+                className="flex-grow border px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={item.detailtitle}
                 onChange={(e) => handleDetailTitleChange(idx, e.target.value)}
               />
             </div>
-            <div className="mb-4 flex justify-center w-full space-x-2 items-center">
-              <label className="w-1/6 block text-gray-700 text-right">詳細内容</label>
+            <div className="mb-4 flex items-start">
+              <label className="w-1/4 block text-gray-700 text-right mr-2 mt-1">クエスト答え</label>
               <textarea 
                 name="detailcontent" 
-                className="w-3/4 border px-4 py-2"
+                className="flex-grow border px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={item.detailcontent}
                 onChange={(e) => handleDetailContentChange(idx, e.target.value)}
               />
               <button 
                 type="button" 
-                className='px-4 py-2 bg-blue-400 text-white rounded' 
+                className='ml-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500'
                 onClick={() => removeDetails(idx)}
               >
                 削除
@@ -80,28 +80,18 @@ const Detailsform = ({ closeDetail, todo, index, updateTodoDetails }) => {
           </div>
         ))}
 
-        <div className='flex justify-between mx-6'>
+        <div className='flex justify-between mt-6'>
           <button 
             type="button" 
-            className='ml-32 mt-4 px-4 py-2 bg-orange-400 text-white rounded'
+            className='px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500'
             onClick={addDetails}
-          >
-            詳細追加
-          </button>
+          >＋</button>
+
           <button 
             type="button" 
-            className='mt-4 px-4 py-2 bg-blue-700 text-white rounded'
-            onClick={handleSaveAndClose}
-          >
-            保存
-          </button>
-          <button 
-            type="button" 
-            className='mt-4 px-4 py-2 bg-red-500 text-white rounded'
-            onClick={closeDetail}
-          >
-            閉じる
-          </button>
+            className='px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500'
+            onClick={handleSaveAndClose} // 「閉じる」をクリックすると内容が保存される
+          >閉じる</button>
         </div>
       </form>
     </div>

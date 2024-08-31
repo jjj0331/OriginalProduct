@@ -29,7 +29,7 @@ export default function MyFavorites() {
 
   return (
     <main>
-      <div className="mt-4 mx-4 grid grid-cols-6 gap-4">
+      <div className="mt-4 mx-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
         {datas.map((data, index) => (
           <Card key={index} data={data} flg={2} />
         ))}

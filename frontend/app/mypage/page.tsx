@@ -15,36 +15,37 @@ const Guidlines = () => {
 
   return (
     <div className='mt-6 w-full px-4 mx-auto'> 
-      <div className="p-4">
-        <ul className='flex gap-0 bg-main_color rounded-t-lg overflow-hidden'>
-          <li 
-            className={`px-6 py-2 cursor-pointer ${activeIndex === 1 ? 'bg-red-200' : 'bg-main_color'}`}
-            onClick={() => changeShow(1)}>お気に入り
-          </li>
-          <li 
-            className={`px-6 py-2 cursor-pointer ${activeIndex === 2 ? 'bg-green-200' : 'bg-main_color'}`}
-            onClick={() => changeShow(2)}>新規作成
-          </li>
-          <li 
-            className={`px-6 py-2 cursor-pointer ${activeIndex === 3 ? 'bg-blue-200' : 'bg-main_color'}`}
-            onClick={() => changeShow(3)}>編集
-          </li>
+      <div className="p-4"> 
+        <ul className='flex gap-0 rounded-t-lg overflow-hidden'>
+          {['お気に入り', '新規作成', '編集'].map((label, index) => (
+            <li 
+              key={index}
+              className={`px-4 sm:px-6 py-2 cursor-pointer text-xs sm:text-sm md:text-base ${
+                activeIndex === index + 1 
+                  ? 'border-t-4 border-l-4 border-r-4 border-black bg-white relative top-[1px] rounded-t-lg' 
+                  : 'border-b-4 border-black'
+              }`}
+              onClick={() => changeShow(index + 1)}
+            >
+              {label}
+            </li>
+          ))}
         </ul>
 
-        <div className='relative overflow-hidden rounded-b-lg border-t-0'>
+        <div className='p-4 border-4 border-black rounded-b-lg mt-[-4px]'> 
           {activeIndex === 1 && (
-            <div className='bg-red-200 h-full p-4'>
+            <div>
               <MyFavorites />
             </div>
           )}
           {activeIndex === 2 && (
-            <div className='bg-green-200 h-full p-4'>
-              <Form/>
+            <div>
+              <Form />
             </div>
           )}
           {activeIndex === 3 && (
-            <div className='bg-blue-200 h-full p-4'>
-              <MyGuidlines/>
+            <div>
+              <MyGuidlines />
             </div>
           )}
         </div>
