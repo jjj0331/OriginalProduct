@@ -16,8 +16,11 @@ Rails.application.routes.draw do
   
 
   #【ユーザの状況】
-  post 'userguidelines/:id',              to: 'user_statuses#create_user_status'
+  post 'userguidelines/:id',             to: 'user_statuses#create_user_status'
+  post 'completetask/:id',               to: 'user_statuses#update_user_status'
   get 'current_user/favoriteguidelines', to: 'user_statuses#show_user_status'
+  get 'userguidelines/:id',              to: 'user_statuses#show_user_one_status'
+
 
 
 

@@ -43,7 +43,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_26_130748) do
     t.integer "guideline_id", null: false
     t.integer "task_id", null: false
     t.integer "detail_task_id"
-    t.boolean "status"
+    t.boolean "status", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["detail_task_id"], name: "index_user_statuses_on_detail_task_id"

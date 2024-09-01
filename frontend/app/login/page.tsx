@@ -28,10 +28,15 @@ const Login = () => {
 
   const handleLogin = () => {
     handleAuth('/login', 'ログインしました', () => {
-      alert('ユーザーが存在しません。新規登録を行います。');
-      handleSignup();
+      const userWantsSignup = confirm('ユーザーが存在しません。新規登録を行いますか？');
+      if (userWantsSignup) {
+        handleSignup();
+      } else {
+        alert('新規登録がキャンセルされました。ログインを再試行してください。');
+      }
     });
   };
+  
 
   const handleSignup = () => {
     handleAuth('/register', '新規登録が完了しました');

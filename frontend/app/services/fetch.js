@@ -3,7 +3,7 @@ import axios from 'axios';
 const apiClient = axios.create({
 
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:3001',
-  timeout: 1000,
+  timeout: 2000,
 });
 
 export const fetchData = async (endpoint, params = {}, token = null) => {
@@ -53,19 +53,32 @@ export const deleteData = async (endpoint, token = null) => {
 
 
 // ChatGPT APIと通信する関数
-export const sendToChatGPT = async (inputText, detailTaskTitle) => {
+export const sendToChatGPT = async (inputText, detailTaskTitle, detailTaskDescription) => {
   const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
   
   try {
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
-        model: 'gpt-3.5-turbo', // 正しいモデル名を指定
+        model: 'gpt-3.5-turbo',
         messages: [
-          { role: 'system', content: 'あなたは日本語のみでコミュニケーションを行います。' },
-          { role: 'user', content: `
-            ${detailTaskTitle}について勉強しています。
-            以下の内容が正しいのか判断し、正しい場合は「1」のみを回答して。【回答】${inputText}` }
+          { 
+            role: 'system', 
+            content: `あなたは、与えられたタスクに関する正確なフィードバックを行うアシスタントです。特に指定がない限り、日本語で応答してください。`
+          },
+          { 
+            role: 'user', 
+            content: `
+              タスク: ${detailTaskTitle}
+              説明: ${detailTaskDescription}
+              
+              私の回答: ${inputText}
+              
+              この回答がタスクの説明と完全に一致している場合は、「999」とだけ返答してください。 
+              一致していない場合、簡潔に（30文字以内）で修正または改善のアドバイスを提供してください。 
+              判断が難しい場合は「[別の回答をしてください]」と返答してください。
+            `
+          }
         ],
         max_tokens: 100,
       },
@@ -77,11 +90,10 @@ export const sendToChatGPT = async (inputText, detailTaskTitle) => {
       }
     );
 
-    return response.data.choices[0].message.content.trim(); // 正しくレスポンスを返す
+    return response.data.choices[0].message.content.trim();
   } catch (error) {
-    console.error('Error in sendToChatGPT:', error); // error全体を表示
-    console.error('Response data:', error.response?.data); // responseの中身を確認
+    console.error('Error in sendToChatGPT:', error);
+    console.error('Response data:', error.response?.data);
     throw error;
   }
 };
-
