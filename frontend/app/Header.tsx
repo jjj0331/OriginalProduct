@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { TokenContext } from './context/TokenContext';
 
 const Header = () => {
+  //accessTokenを呼び出す
   const { accessToken } = useContext(TokenContext);
-  const [isOpen, setIsOpen] = useState(false);
 
+  //ハンバーガーメニューのボタンの変数(isOpen)とアクション(toggleMenu,closeMenu)を管理
+  const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
-
   const closeMenu = () => {
     setIsOpen(false);
   };
@@ -18,9 +19,17 @@ const Header = () => {
   return (
     <div className='flex justify-between items-center border-b-2 border-black py-2 h-16 px-4'>
       <div className='text-xl sm:text-2xl font-bold'>
-        みんなのガイドライン
+           <div className='flex justify-between items-center'> 
+            <p>みんなのガイドライン</p>
+            <img 
+              className="opacity-90 h-12 object-contain" 
+                src="/Guidelines.png" 
+                alt="Background" 
+            />
+           </div>   
       </div>
       
+      {/* 640px以下の場合、ハンバーガメニューに切り替える */}
       <div className='sm:hidden'>
         <button onClick={toggleMenu} className="focus:outline-none">
           {isOpen ? (
@@ -35,8 +44,10 @@ const Header = () => {
         </button>
       </div>
       
+      
       <div className={`absolute top-16 left-0 w-full z-50 sm:relative sm:top-0 sm:left-0 sm:w-auto flex-col sm:flex sm:flex-row sm:items-center sm:space-x-5 bg-white dark:bg-gray-800 sm:bg-transparent ${isOpen ? 'flex bg-gray-200' : 'hidden'}`}>
-        <Link href="/" className='block sm:inline-block hover:bg-selected-bg my-2 sm:my-0 py-2 px-4 rounded-lg' onClick={closeMenu}>
+        
+        <Link href="/" className='block sm:inline-block hover:bg-selected-bg my-2 sm:my-0 py-2 px-4 rounded-lg' onClick={closeMenu} >
           ホーム
         </Link>
 

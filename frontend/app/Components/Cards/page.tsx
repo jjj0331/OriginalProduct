@@ -1,7 +1,8 @@
 import React from 'react'
 import Link from 'next/link';
 
-const Card = ({ data ,flg}) => {
+const Card = ({ data ,flg}) => {//引数にdata,flgを受け取る
+  //ガイドラインの概要とタイトルを受け取る
   const { description, title } = data;
 
   return (
@@ -14,6 +15,7 @@ const Card = ({ data ,flg}) => {
           {description.length > 45 ? `${description.slice(0, 43)}...` : description}
         </p>
         
+        {/* flgの内容でLink先が変更 */}
         {flg === 1 ? (
           <Link href={`/guidelines/${data.id}`} className="absolute bottom-2 right-1 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800">
             Read more →

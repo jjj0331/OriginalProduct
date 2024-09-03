@@ -5,14 +5,19 @@ import Card from "./Components/Cards/page";
 import Serch from "./Components/Serch/page";
 
 export default function Home() {
+  //検索フォームに打ち込まれた内容を管理
   const [inputdata, setInputdate] = useState("");
+  //表示するデータ(ガイドライン)
   const [datas, setDatas] = useState([]);
+  //エラー管理
   const [error, setError] = useState(null);
 
+  //Serchに渡す関数
   const getInputValue = (data) => {
     setInputdate(data);
   };
-
+  
+  //APIの記述が単調になるため作成
   const handleApiRequest = async (endpoint, params = {}) => {
     try {
       const data = await fetchData(endpoint, params);
@@ -22,13 +27,14 @@ export default function Home() {
     }
   };
 
+  //画面がレンダリングされた最初はすべてのガイドラインを取得
   useEffect(() => {
     handleApiRequest('/guidelines/all');
   }, []);
 
+  //inputdataが変化した場合(inputdataの内容でAPIが変化)
   useEffect(() => {
     if (inputdata) {
-
       handleApiRequest('/guidelines/search', { query: inputdata });
     } else {
       handleApiRequest('/guidelines/all');

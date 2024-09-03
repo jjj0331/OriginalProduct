@@ -7,50 +7,62 @@ import { postData } from '../../services/fetch';
 
 const Form = () => {
   const { accessToken } = useContext(TokenContext);
+
+  //サブフォームの表示・非表示の変数を管理
   const [isDetailVisible, setDetailVisible] = useState(false);
+  //現在選択しているTodoのidを管理
   const [currentTodoIndex, setCurrentTodoIndex] = useState(null);
+  //メインフォームに記入された内容を管理1
   const [todos, setTodos] = useState([{ title: '', content: '', detail_tasks: [] }]);
+  //メインフォームに記入された内容を管理2(ガイドラインのタイトル)
   const [guidelineTitle, setGuidelineTitle] = useState('');
+  //メインフォームに記入された内容を管理3(ガイドラインの概要)
   const [guidelineDescription, setGuidelineDescription] = useState('');
+  //画面遷移のためにuseRouterをオブジェクト化
   const router = useRouter();
 
+  //Todosに新たにTodoを追加
   const addTodos = () => {
     setTodos([...todos, { title: '', content: '', detail_tasks: [] }]);
   };
-
+  //Todosから対象のTodoを削除
   const removeItem = (index) => {
     setTodos(todos.filter((_, i) => i !== index));
   };
 
-  const showDetail = (index) => {
-    setCurrentTodoIndex(index);
-    setDetailVisible(true);
-  };
-
-  const closeDetail = () => {
-    setDetailVisible(false);
-    setCurrentTodoIndex(null);
-  };
-
+  //Todosから対象のTodoのTitleを更新
   const handleTitleChange = (index, newTitle) => {
     const newTodos = [...todos];
     newTodos[index].title = newTitle;
     setTodos(newTodos);
   };
-
+  //Todosから対象のTodoのcontentを更新
   const handleContentChange = (index, newContent) => {
     const newTodos = [...todos];
     newTodos[index].content = newContent;
     setTodos(newTodos);
   };
 
+  //サブフォームの表示およびその対象のTodoのindex
+  const showDetail = (index) => {
+    setCurrentTodoIndex(index);
+    setDetailVisible(true);
+  };
+  //サブフォームの非表示
+  const closeDetail = () => {
+    setDetailVisible(false);
+    setCurrentTodoIndex(null);
+  };
+  //サブフォームに渡す関数(detail_tasksを更新)
   const updateTodoDetails = (index, details) => {
     const newTodos = [...todos];
     newTodos[index].detail_tasks = details;
     setTodos(newTodos);
   };
 
+  //[登録]が押された後の動作
   const Submit = async (e) => {
+    //ページの遷移を止める
     e.preventDefault();
 
     // バリデーションチェック
@@ -58,17 +70,16 @@ const Form = () => {
       alert("ガイドラインのタイトルを入力してください。");
       return;
     }
-
     if (!guidelineDescription.trim()) {
       alert("ガイドラインの概要を入力してください。");
       return;
     }
-
     if (todos.some(todo => !todo.title.trim())) {
       alert("すべてのTodolistにタイトルを入力してください。");
       return;
     }
 
+    //ガイドラインの内容を登録するためにデータを整形
     try {
       const guideline = {
         title: guidelineTitle,
@@ -82,7 +93,7 @@ const Form = () => {
           }))
         }))
       };
-
+      //Railsのバックエンドに、フォームデータとtokenを送信する
       await postData('/guidelines/new', { guideline }, accessToken);  
       alert("投稿できました");
       router.push('/');
@@ -93,6 +104,8 @@ const Form = () => {
 
   return (
     <div className='mx-auto w-full sm:w-10/12 md:w-8/12 lg:w-6/12 xl:w-5/12 mt-6'>
+      {/* isDetailVisibleがTrue及び対象のTodoが定まったいる場合、
+      サブフォームを表示 */}
       {isDetailVisible && currentTodoIndex !== null ? (
         <Detailsform
           closeDetail={closeDetail}

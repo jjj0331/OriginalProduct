@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { TokenContext } from '../../context/TokenContext';
 import { fetchData, postData } from '../../services/fetch'; // 共通のAPIクライアントを使用
 
@@ -9,8 +10,14 @@ const Carddetail = () => {
   const { accessToken } = useContext(TokenContext);
   const [datas, setDatas] = useState({});
   const { id } = useParams();
+  const router = useRouter();
 
   const AddMyFavorite = async () => {
+    if(accessToken==null){
+      router.push('/login');
+      return null;
+    }
+
     try {
       await postData(`/userguidelines/${id}`, {} ,accessToken);
       alert("Mylistに追加しました");

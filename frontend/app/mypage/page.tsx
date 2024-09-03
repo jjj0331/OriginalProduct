@@ -22,7 +22,7 @@ const Guidlines = () => {
               key={index}
               className={`px-4 sm:px-6 py-2 cursor-pointer text-xs sm:text-sm md:text-base ${
                 activeIndex === index + 1 
-                  ? 'border-t-4 border-l-4 border-r-4 border-black bg-white relative top-[1px] rounded-t-lg' 
+                  ? 'border-t-4 border-l-4 border-r-4 border-black bg-orange-400  relative top-[1px] rounded-t-lg' 
                   : 'border-b-4 border-black'
               }`}
               onClick={() => changeShow(index + 1)}
@@ -49,6 +49,12 @@ const Guidlines = () => {
             </div>
           )}
         </div>
+      </div>
+      <div className="flex justify-end">
+        <a href="/" className='block sm:inline-block border-2 rounded-lg my-2 sm:my-0 py-2 px-4 bg-red-500 font-bold flex items-center mr-4'>
+          <i className="fa-solid fa-user"></i>
+          <span className='ml-2 text-white'>ログアウト</span>
+        </a>
       </div>
     </div>
   );

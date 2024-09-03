@@ -1,5 +1,11 @@
+/* Tailwind CSSの基本スタイルをインポート */
 @tailwind base;
+
+/* Tailwind CSSのコンポーネントスタイルをインポート */
 @tailwind components;
+
+/* Tailwind CSSのユーティリティクラスをインポート */
 @tailwind utilities;
 
+/* Google FontsからNoto Sans JPフォントをインポート */
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap");

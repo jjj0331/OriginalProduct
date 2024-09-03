@@ -1,8 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-const Detailsform = ({ closeDetail, todo, index, updateTodoDetails }) => {
+const Detailsform = ({ closeDetail, todo, index, updateTodoDetails }) => {//メインのフォームからいくつか関数を受け取る
+
+  //サブフォルダーの内容を管理する
   const [items, setItems] = useState([{ detailtitle: '', detailcontent: '', _destroy: false }]);
+
 
   useEffect(() => {
     if (todo && todo.detail_tasks && todo.detail_tasks.length > 0) {
@@ -42,7 +45,7 @@ const Detailsform = ({ closeDetail, todo, index, updateTodoDetails }) => {
 
   const handleSaveAndClose = () => {
     updateTodoDetails(index, items); // 入力内容を保存
-    closeDetail(); // フォームを閉じる
+    closeDetail();                   // フォームを閉じる
   };
 
   return (
@@ -50,7 +53,7 @@ const Detailsform = ({ closeDetail, todo, index, updateTodoDetails }) => {
       <form className="bg-white w-full max-w-lg mx-auto mt-16 border-2 border-gray-300 rounded shadow-lg px-6 py-8">
         <h1 className="text-2xl font-bold text-gray-700 mb-6 text-center">クエスト作成フォーム</h1>
         {items.filter(item => !item._destroy).map((item, idx) => (
-          <div className='mb-4' key={idx}>
+          <div className='mb-4 border-b-2 border-black' key={idx}>
             <div className="mb-4 flex items-center">
               <label className="w-1/4 block text-gray-700 text-right mr-2">
               クエスト</label>
