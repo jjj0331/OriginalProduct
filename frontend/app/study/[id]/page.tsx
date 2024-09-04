@@ -70,9 +70,12 @@ const Study = () => {
   };
 
   return (
-    <div className="flex h-screen bg-yellow-50">
-      <div className="w-1/5 bg-orange-100 p-6 border-orange-300 border-r-2 rounded-lg shadow-lg">
-        <h1 className="font-bold text-xl mb-6 text-orange-800">学習内容: {datas.guideline_title}</h1>
+    <div className="flex min-h-screen">
+      <div className="flex-grow w-1/5 p-3 border-black border-r-4">
+        <h1 className="text-xl mb-6 text-black">
+          学習内容: {datas.guideline_title}
+        </h1>
+        {/* 他のコンテンツ */}
         {datas.tasks && datas.tasks.length > 0 ? (
           datas.tasks.map((task, index) => (
             <div key={index} className="mb-4">
@@ -82,7 +85,7 @@ const Study = () => {
                   setSelectedDetailTask(null);
                   setChatHistory([]);
                 }}
-                className={`block hover:underline p-2 rounded-lg bg-orange-200 hover:bg-orange-300 text-orange-800 transition-all`}>
+                className="block hover:underline p-2 rounded-lg bg-blue-200 hover:bg-blue-300 text-blue-800 transition-all">
                 {index + 1}: {task.task_title}
               </button>
 
@@ -96,8 +99,8 @@ const Study = () => {
                         setChatHistory([]);
                       }}
                       className={`block p-2 mt-1 rounded-lg transition-all 
-                        ${detail_task.status ? 'bg-gray-400 text-gray-700' : 'bg-white text-orange-600 border border-orange-400'} 
-                        ${selectedDetailTask?.detail_task_id === detail_task.detail_task_id ? 'font-bold bg-orange-300' : ''}`}>
+                        ${detail_task.status ? 'bg-gray-400 text-gray-700' : 'bg-white text-blue-600 border border-blue-400'} 
+                        ${selectedDetailTask?.detail_task_id === detail_task.detail_task_id ? 'font-bold bg-blue-300' : ''}`}>
                       - {detail_task.detail_task_title}
                     </button>
                   ))}
@@ -106,18 +109,18 @@ const Study = () => {
             </div>
           ))
         ) : (
-          <p className="text-orange-700">タスクが見つかりません。</p>
+          <p className="text-blue-700">タスクが見つかりません。</p>
         )}
       </div>
 
-      <div className="flex flex-col w-5/6 bg-white h-full rounded-lg shadow-lg p-6">
+      <div className="flex flex-col w-4/5 min-h-screen p-6">
+        {/* メインコンテンツ */}
         {selectedDetailTask ? (
           <>
             <div className="py-4 flex-grow overflow-y-auto">
-              <h1 className="border-b-2  text-2xl text-orange-800">クエスト: 
-                <i className="font-bold">{selectedDetailTask.detail_task_title}</i>
+              <h1 className="border-b-2 border-black text-2xl text-black">Quest: 
+                <i className="font-bold text-blue-600 px-4">{selectedDetailTask.detail_task_title}</i>
               </h1>
-
               <div className="mb-4 mt-6">
                 {chatHistory.map((message, index) => (
                   <div key={index} className={`p-3 rounded-lg mb-4 ${message.role === 'user' ? 'text-right bg-blue-100' : 'text-left bg-gray-100'}`}>
@@ -133,32 +136,29 @@ const Study = () => {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="bg-orange-200 p-3 border-t-2 border-orange-300 flex items-center rounded-lg">
+            <form 
+              onSubmit={handleSubmit} 
+              className="fixed bottom-0 right-0 w-4/5 mb-2 px-12 border-blue-300 flex items-center"
+            >
               <input 
                 type="text" 
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="ここに入力してください" 
-                className="flex-grow p-2 border-2 border-orange-300 rounded-lg mr-4" 
+                className="flex-grow p-2 border-2 border-blue-300 rounded-lg" 
               />
-              <button type="submit" className="p-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all">送信</button>
+              <button type="submit" className="p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all">
+                送信
+              </button>
             </form>
           </>
-        ) : selectedTask ? (
-          <div>
-            <h1 className="border-b-2 border-orange-300 text-2xl text-orange-800">タスクのタイトル: 
-              <i className="font-bold">{selectedTask.task_title}</i>
-            </h1>
-            
-            <h1 className="border-b-2 border-orange-300 mt-4 mb-6 text-orange-700">タスクの説明: 
-              <i className="font-bold">{selectedTask.task_description}</i>
-            </h1>
-          </div>
         ) : (
-          <p className="text-orange-700">タスクまたは詳細タスクを選択してください。</p>
+          <p className="text-blue-700">タスクまたは詳細タスクを選択してください。</p>
         )}
       </div>
     </div>
+
+
   );
 }
 

@@ -9,3 +9,9 @@
 
 /* Google FontsからNoto Sans JPフォントをインポート */
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap");
+
+html,
+body {
+  height: 100%;
+  min-height: 2vh;
+}

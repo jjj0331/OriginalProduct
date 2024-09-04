@@ -50,7 +50,7 @@ const Detailsform = ({ closeDetail, todo, index, updateTodoDetails }) => {//メ�
 
   return (
     <div className='fixed inset-0 bg-gray-800 bg-opacity-75 overflow-y-auto flex justify-center items-center'>
-      <form className="bg-white w-full max-w-lg mx-auto mt-16 border-2 border-gray-300 rounded shadow-lg px-6 py-8">
+      <form className="bg-white w-full max-w-3xl mx-auto border-2 border-gray-300 rounded shadow-lg px-6 py-8">
         <h1 className="text-2xl font-bold text-gray-700 mb-6 text-center">クエスト作成フォーム</h1>
         {items.filter(item => !item._destroy).map((item, idx) => (
           <div className='mb-4 border-b-2 border-black' key={idx}>
