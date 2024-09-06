@@ -14,58 +14,80 @@ const Study = () => {
   const [error, setError] = useState(null);
   const { id } = useParams();
 
-  useEffect(() => {
-    const fetchGuidelineDetails = async () => {
-      try {
-        const data = await fetchData(`/userguidelines/${id}`, {}, accessToken);
-        console.log('Fetched data:', data);
-        setDatas(data); // データ全体を設定
-      } catch (error) {
-        console.error('ガイドラインの取得中にエラーが発生しました', error.response?.data?.message || error.message);
-        setError('ガイドラインの取得に失敗しました。');
-      }
-    };
+  // ガイドラインデータの取得
+  const fetchGuidelineDetails = async () => {
+    try {
+      const data = await fetchData(`/userguidelines/${id}`, {}, accessToken);
+      setDatas(data); // データをstateに設定
+      return data; // データを返す
+    } catch (error) {
+      console.error('ガイドラインの取得中にエラーが発生しました', error.response?.data?.message || error.message);
+      setError('ガイドラインの取得に失敗しました。');
+    }
+  };
 
+  useEffect(() => {
     if (id && accessToken) {
       fetchGuidelineDetails();
     }
   }, [id, accessToken]);
 
+  // タスク完了処理
   const completeTask = async (detailTaskId) => {
     try {
-      const response = await postData(`/completetask/${detailTaskId}`, {}, accessToken);
-      console.log('タスク完了情報が送信されました:', response);
+      await postData(`/completetask/${detailTaskId}`, {}, accessToken);
+      const updatedData = await fetchGuidelineDetails(); // データ再取得
+      const updatedTask = updatedData.tasks
+        .flatMap(task => task.detail_tasks)
+        .find(detailTask => detailTask.detail_task_id === detailTaskId);
       
-      await fetchGuidelineDetails(); // 更新後にデータを再取得
+      if (updatedTask) {
+        setSelectedDetailTask(updatedTask); // 最新データで更新
+      }
+
     } catch (error) {
       console.error('タスク完了情報の送信中にエラーが発生しました:', error);
       setError('タスク完了に失敗しました。');
     }
   };
 
+  // フォーム送信処理
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     try {
       const userMessage = { role: 'user', content: inputText };
-      setChatHistory([...chatHistory, userMessage]);
+      setChatHistory(prev => [...prev, userMessage]);
 
       const response = await sendToChatGPT(inputText, selectedDetailTask.detail_task_title, selectedDetailTask.detail_task_description);
       const gptMessage = { role: 'assistant', content: response };
-      setChatHistory([...chatHistory, userMessage, gptMessage]);
+      setChatHistory(prev => [...prev, userMessage, gptMessage]);
 
       setInputText('');
 
-      if (response === '999') {
+      if (response === 'クエストクリア') {
         const confirmEndTask = confirm('このタスクを終了させますか？');
         if (confirmEndTask) {
-          alert('タスクが完了しました！');
           await completeTask(selectedDetailTask.detail_task_id);  
+          alert('タスクが完了しました！');
         }
       }
     } catch (error) {
       console.error('ChatGPT APIの呼び出し中にエラーが発生しました', error);
       setError('ChatGPTとの通信中にエラーが発生しました。');
+    }
+  };
+
+  // タスク手動完了ボタンの処理
+  const handleCompleteClick = async () => {
+    if (selectedDetailTask) {
+      const confirmEndTask = confirm('このタスクを終了させますか？');
+      if (confirmEndTask) {
+        await completeTask(selectedDetailTask.detail_task_id);
+        alert('タスクが完了しました！');
+      }
+    } else {
+      alert('詳細タスクが選択されていません。');
     }
   };
 
@@ -75,7 +97,7 @@ const Study = () => {
         <h1 className="text-xl mb-6 text-black">
           学習内容: {datas.guideline_title}
         </h1>
-        {/* 他のコンテンツ */}
+
         {datas.tasks && datas.tasks.length > 0 ? (
           datas.tasks.map((task, index) => (
             <div key={index} className="mb-4">
@@ -113,8 +135,7 @@ const Study = () => {
         )}
       </div>
 
-      <div className="flex flex-col w-4/5 min-h-screen p-6">
-        {/* メインコンテンツ */}
+      <div className="flex flex-col w-4/5 min-h-screen p-6 relative">
         {selectedDetailTask ? (
           <>
             <div className="py-4 flex-grow overflow-y-auto">
@@ -130,16 +151,7 @@ const Study = () => {
               </div>
             </div>
 
-            {error && (
-              <div className="mt-4 p-2 text-red-500">
-                {error}
-              </div>
-            )}
-
-            <form 
-              onSubmit={handleSubmit} 
-              className="fixed bottom-0 right-0 w-4/5 mb-2 px-12 border-blue-300 flex items-center"
-            >
+            <form onSubmit={handleSubmit} className="fixed bottom-0 right-0 w-4/5 mb-2 px-12 border-blue-300 flex items-center">
               <input 
                 type="text" 
                 value={inputText}
@@ -150,15 +162,19 @@ const Study = () => {
               <button type="submit" className="p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all">
                 送信
               </button>
+              <button 
+                type="button" 
+                className='ml-1 p-3 bg-gray-300 border rounded-lg border-black'
+                onClick={handleCompleteClick}>
+                  完了
+              </button>
             </form>
           </>
         ) : (
-          <p className="text-blue-700">タスクまたは詳細タスクを選択してください。</p>
+          <p className="text-blue-700 mt-2">タスクまたは詳細タスクを選択してください。</p>
         )}
       </div>
     </div>
-
-
   );
 }
 

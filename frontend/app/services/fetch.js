@@ -70,11 +70,12 @@ export const sendToChatGPT = async (inputText, detailTaskTitle, detailTaskDescri
             role: 'user', 
             content: `
               タスク: ${detailTaskTitle}
-              説明: ${detailTaskDescription}
+              タスクの答え: ${detailTaskDescription}
               
               私の回答: ${inputText}
               
-              この回答がタスクの説明と完全に一致している場合は、「999」とだけ返答してください。 
+              ${inputText}が${detailTaskDescription}の内容と等しいもしくはコードなどが
+              内容を満たしている場合は、「クエストクリア」とだけ返答してください。 
               一致していない場合、簡潔に（30文字以内）で修正または改善のアドバイスを提供してください。 
               判断が難しい場合は「[別の回答をしてください]」と返答してください。
             `

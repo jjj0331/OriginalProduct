@@ -24,6 +24,7 @@ export default function Home() {
       setDatas(data);
     } catch (error) {
       setError("データの取得に失敗しました。");
+      setTimeout(() => handleApiRequest('/guidelines/all'), 3000); 
     }
   };
 
