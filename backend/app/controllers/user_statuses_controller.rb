@@ -13,6 +13,16 @@ class UserStatusesController < ApplicationController
         guideline.tasks.each do |task|
           # detail_tasksが存在しない場合はnilを含めて一つの配列にする
           (task.detail_tasks.presence || [nil]).each do |detail_task|
+            # 既存のUserStatusを確認し、削除
+            existing_status = UserStatus.find_by(
+              user_id: user.id,
+              guideline_id: guideline.id,
+              task_id: task.id,
+              detail_task_id: detail_task&.id
+            )
+            existing_status&.destroy # 既存のステータスを削除
+  
+            # 新しいUserStatusを作成
             user_status = UserStatus.new(
               user_id: user.id,
               guideline_id: guideline.id,
@@ -30,7 +40,7 @@ class UserStatusesController < ApplicationController
         end
       end
   
-      render json: { message: '登録しました' }, status: :created
+      render json: { message: '登録を更新しました' }, status: :created
     rescue ActiveRecord::RecordNotUnique => e
       # 一意制約エラーが発生した場合
       render json: { error: 'すでに登録されています' }, status: :unprocessable_entity
@@ -39,6 +49,7 @@ class UserStatusesController < ApplicationController
       render json: { error: e.message }, status: :unprocessable_entity
     end
   end
+  
   
 
   def show_user_one_status

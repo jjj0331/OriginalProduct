@@ -51,9 +51,9 @@ const Header = () => {
           ホーム
         </Link>
 
-        <Link href="/" className='block sm:inline-block hover:bg-selected-bg my-2 sm:my-0 py-2 px-4 rounded-lg' onClick={closeMenu}>
+        {/* <Link href="/Introduction" className='block sm:inline-block hover:bg-selected-bg my-2 sm:my-0 py-2 px-4 rounded-lg' onClick={closeMenu}>
           はじめに
-        </Link>
+        </Link> */}
 
         {accessToken ? (
           <Link href="/mypage" className='block sm:inline-block border-2 rounded-lg my-2 sm:my-0 py-2 px-4 bg-orange-400 font-bold flex items-center' onClick={closeMenu}>
