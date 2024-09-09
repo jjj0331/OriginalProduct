@@ -40,8 +40,10 @@ PASSWORD : password
 
 ## ホーム画面
 ●ヘッダには「ホーム」「ログイン」のボタンが存在
+
 ●ホーム画面には、DBに登録されているガイドラインが表示される
-　・「Read more」をクリックするとガイドラインの詳細を見ることができる
+
+  ・「Read more」をクリックするとガイドラインの詳細を見ることができる
 　・検索ボックスで検索することで、表示するガイドラインを絞ることができる
 
 [![YouTube](https://img.youtube.com/vi/wtEiK_k5PRA/0.jpg)](https://youtu.be/wtEiK_k5PRA)
