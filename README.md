@@ -40,9 +40,7 @@ PASSWORD : password
 
 ## ホーム画面
 ・ヘッダには「ホーム」「ログイン」のボタンが存在
-![image](https://github.com/user-attachments/assets/81ec0e38-1a88-485f-8dd8-38cb7e4d7da4)
-・検索ボックスで検索することで、表示するガイドラインを絞ることができる
-![image](https://github.com/user-attachments/assets/bde8f69d-dafc-4e9a-a778-64b24846cd68)
-・DBに登録されているガイドラインが表示される→「Read more」をクリックするとガイドラインの詳細を見ることができる
-![image](https://github.com/user-attachments/assets/031f56e0-62ea-4ea0-b9af-6d35b4500325)
+・ホーム画面には、DBに登録されているガイドラインが表示される
+　→「Read more」をクリックするとガイドラインの詳細を見ることができる
+　→検索ボックスで検索することで、表示するガイドラインを絞ることができる
 
