@@ -37,3 +37,7 @@ PASSWORD : password
 ## ■ 解説記事( Qiita )
 
 # ■ 主なページ
+
+##　ホーム画面
+![image](https://github.com/user-attachments/assets/4cde275b-b881-4d00-9a9e-d7cc13612a98)
+
