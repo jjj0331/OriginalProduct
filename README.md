@@ -44,6 +44,7 @@ PASSWORD : password
 　→「Read more」をクリックするとガイドラインの詳細を見ることができる
 　→検索ボックスで検索することで、表示するガイドラインを絞ることができる
 
- ![レコーディング 2024-09-09 234106](https://github.com/user-attachments/assets/be36c362-598f-4ade-9cc2-d64bd6484b43)
+
+![レコーディング 2024-09-09 234106 (1)](https://github.com/user-attachments/assets/0d429662-343d-41bb-85a1-2569f4a80165)
 
 
