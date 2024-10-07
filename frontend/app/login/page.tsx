@@ -13,7 +13,7 @@ const Login = () => {
   const handleAuth = async (endpoint, successMessage, failCallback = null) => {
     try {
       const response = await postData(endpoint, { user: { username, password } });
-      const { access_token } = response;
+      const { access_token ,message} = response;
       setAccessToken(access_token);
       alert(successMessage);
       router.push('/');
@@ -36,13 +36,26 @@ const Login = () => {
       }
     });
   };
-  
+
   const handleSignup = () => {
     handleAuth('/register', '新規登録が完了しました');
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    //パスワードが5文字未満の場合、アラートを実行して処理を中断
+    if(password.length<5){
+      alert("パスワードは最低5文字以上でなければなりません")
+      return
+    }
+
+    //ユーザ名が空白はだめです
+    if(username==""){
+      alert("ユーザ名が空白です")
+      return
+    }    
+    //ログイン処理を実行
     handleLogin();
   };
 

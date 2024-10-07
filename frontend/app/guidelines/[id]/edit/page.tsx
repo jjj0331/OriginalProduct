@@ -80,6 +80,22 @@ const Form = () => {
               alert("すべてのTodolistにタイトルを入力してください。");
               return;
           }
+
+          // バリデーションチェック: 各Todoの詳細タスクのタイトルと内容
+          const hasEmptyDetails = todos.some(todo => {
+            if (todo.detail_tasks.length === 0) {
+              alert("すべてのTodolistには最低一つのクエストを設定してください。");
+              return true;
+            }
+            return todo.detail_tasks.some(detail => !detail.detailtitle?.trim() || !detail.detailcontent?.trim());
+          });
+
+          if (hasEmptyDetails) {
+            alert("すべてのクエストには内容と回答を入力してください。");
+            return;
+          }
+
+
     try {
       const guideline = {
         title: guidelineTitle, 
@@ -107,31 +123,39 @@ const Form = () => {
     }
   };
 
+  //レンダリング時のデータ取得(nilガード済み)
   useEffect(() => {
     const catchdatas = async () => {
       try {
-        const guidelineData = await fetchData(`/guidelines/${id}`, {},accessToken);
-        setGuidelineTitle(guidelineData.title);
-        setGuidelineDescription(guidelineData.description);
-        setTodos(guidelineData.tasks.map(task => ({
-          id: task.id,
-          title: task.title,
-          content: task.description,
-          _destroy: false, // Initialize _destroy flag
-          detail_tasks: task.detail_tasks.map(detail => ({
-            id: detail.id,
-            detailtitle: detail.title,
-            detailcontent: detail.description,
-            _destroy: false // Initialize _destroy flag
-          }))
-        })));
+        const guidelineData = await fetchData(`/guidelines/${id}`, {}, accessToken);
+        
+        // guidelineData が null または undefined の場合に備えてガードを追加
+        if (guidelineData) {
+          setGuidelineTitle(guidelineData.title || ''); // titleが存在しない場合は空文字を設定
+          setGuidelineDescription(guidelineData.description || ''); // descriptionが存在しない場合は空文字を設定
+          setTodos(guidelineData.tasks ? guidelineData.tasks.map(task => ({
+            id: task.id,
+            title: task.title || '', // titleが存在しない場合は空文字を設定
+            content: task.description || '', // descriptionが存在しない場合は空文字を設定
+            _destroy: false, 
+            detail_tasks: task.detail_tasks ? task.detail_tasks.map(detail => ({
+              id: detail.id,
+              detailtitle: detail.title || '', // detailtitleが存在しない場合は空文字を設定
+              detailcontent: detail.description || '', // detailcontentが存在しない場合は空文字を設定
+              _destroy: false
+            })) : []
+          })) : []);
+        } else {
+          console.error('ガイドラインデータが存在しません');
+        }
       } catch (error) {
         console.error('データの取得に失敗しました', error);
       }
     };
-
+  
     catchdatas();
   }, [id]);
+  
 
   const handleDelete = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -139,7 +163,7 @@ const Form = () => {
       try {
         const response = await deleteData(`/guidelines/${id}`, accessToken);
         console.log('Delete response:', response);  // 追加してレスポンスを確認
-        if (response.status === 200 || response.message === "Guideline successfully deleted") {  // ステータスコードか、成功メッセージを確認
+        if (response && (response.status === 200 || response.message === "Guideline successfully deleted")) {  // ステータスコードか、成功メッセージを確認
           alert("ガイドラインが正常に削除されました");
           router.push('/');
         } else {
@@ -191,32 +215,33 @@ const Form = () => {
         <div className='w-full mt-4'>
           <label className='mt-4 font-bold mr-4'>タスク</label>
           {todos.filter(todo => !todo._destroy).map((todo, index) => (
-            <div className="w-full" id="target" key={index}>
-              <div className="flex items-center gap-1 mb-2 mt-1">
-                <i>{index + 1}</i>
-                <input 
-                  type="text" 
-                  className="flex-grow border py-2 rounded-lg"
-                  value={todo.title}
-                  onChange={(e) => handleTitleChange(index, e.target.value)}
-                />
-                <button 
-                  type="button" 
-                  onClick={() => showDetail(index)} 
-                  className='px-2 py-2 border-2 rounded-lg bg-blue-700 text-white font-bold'
-                >
-                  詳細
-                </button>
-                <button 
-                  type="button" 
-                  onClick={() => removeItem(index)} 
-                  className='px-2 py-2 border-2 rounded-lg bg-red-700 text-white font-bold'
-                >
-                  削除
-                </button>
-              </div>
+          <div className="w-full" id="target" key={index}>
+            <div className="flex items-center gap-1 mb-2 mt-1">
+              <i>{index + 1}</i>
+              <input 
+                type="text" 
+                className="flex-grow border py-2 rounded-lg"
+                value={todo.title || ''} // titleが存在しない場合は空文字を設定
+                onChange={(e) => handleTitleChange(index, e.target.value)}
+              />
+              <button 
+                type="button" 
+                onClick={() => showDetail(index)} 
+                className='px-2 py-2 border-2 rounded-lg bg-blue-700 text-white font-bold'
+              >
+                詳細
+              </button>
+              <button 
+                type="button" 
+                onClick={() => removeItem(index)} 
+                className='px-2 py-2 border-2 rounded-lg bg-red-700 text-white font-bold'
+              >
+                削除
+              </button>
             </div>
-          ))}
+          </div>
+        ))}
+
         </div>
 
         <button 

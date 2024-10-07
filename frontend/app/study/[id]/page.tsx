@@ -1,25 +1,39 @@
+//CSRを宣言
 'use client';
-import React, { useEffect, useContext, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { fetchData, sendToChatGPT, postData } from '../../services/fetch';
-import { TokenContext } from '../../context/TokenContext';
+
+//【各種関数をインポート】
+import React, { useEffect, useContext, useState } from 'react';//状態を管理する関数
+import { useParams } from 'next/navigation';//URLのidを取得
+import { fetchData, sendToChatGPT, postData } from '../../services/fetch';//servicesをインポート
+import { TokenContext } from '../../context/TokenContext';//token管理
 
 const Study = () => {
+  
+  //【各種変数宣言】
+  //Tokenを取得
   const { accessToken } = useContext(TokenContext);
+  //対象ガイドのデータ
   const [datas, setDatas] = useState([]);
+  //選択されたタスクを管理
   const [selectedTask, setSelectedTask] = useState(null);
+  //選択されたタスクのクエストを管理
   const [selectedDetailTask, setSelectedDetailTask] = useState(null);
+  //フォームに入力された内容を管理
   const [inputText, setInputText] = useState('');
+  //ChatGPTとの会話履歴を格納
   const [chatHistory, setChatHistory] = useState([]); 
+  //error内容を格納を管理
   const [error, setError] = useState(null);
+  //ページのidを取得および格納
   const { id } = useParams();
 
-  // ガイドラインデータの取得
+//---------------------------------------------------------------------------
+  // 【初回レンダリング時のガイドラインデータの取得】
   const fetchGuidelineDetails = async () => {
     try {
       const data = await fetchData(`/userguidelines/${id}`, {}, accessToken);
       setDatas(data); // データをstateに設定
-      return data; // データを返す
+      //return data;    // データを返す
     } catch (error) {
       console.error('ガイドラインの取得中にエラーが発生しました', error.response?.data?.message || error.message);
       setError('ガイドラインの取得に失敗しました。');
@@ -27,12 +41,15 @@ const Study = () => {
   };
 
   useEffect(() => {
+    //idとTokenがある場合のみ実行
     if (id && accessToken) {
       fetchGuidelineDetails();
     }
   }, [id, accessToken]);
+//---------------------------------------------------------------------------
 
-  // タスク完了処理
+//---------------------------------------------------------------------------
+ // 【タスク完了処理】
   const completeTask = async (detailTaskId) => {
     try {
       await postData(`/completetask/${detailTaskId}`, {}, accessToken);
@@ -55,20 +72,34 @@ const Study = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+  
     try {
       const userMessage = { role: 'user', content: inputText };
       setChatHistory(prev => [...prev, userMessage]);
-
-      const response = await sendToChatGPT(inputText, selectedDetailTask.detail_task_title, selectedDetailTask.detail_task_description);
+  
+      // ChatGPT APIへのリクエスト（chatHistoryも渡す）
+      const response = await sendToChatGPT(inputText, selectedDetailTask.detail_task_title, selectedDetailTask.detail_task_description, chatHistory);
+  
       const gptMessage = { role: 'assistant', content: response };
-      setChatHistory(prev => [...prev, userMessage, gptMessage]);
-
+      setChatHistory(prev => [...prev, gptMessage]);
+  
       setInputText('');
-
+  
+      // 会話履歴の全体の文字数を計算
+      const totalChatLength = chatHistory.reduce((acc, message) => acc + message.content.length, 0);
+  
+      // 5000文字を超えた場合の処理
+      if (totalChatLength > 5000) {
+        const confirmReset = confirm('会話履歴が5000文字を超えました。リセットしますか？');
+        if (confirmReset) {
+          setChatHistory([]);  // 会話履歴をリセット
+        }
+      }
+  
       if (response === 'クエストクリア') {
         const confirmEndTask = confirm('このタスクを終了させますか？');
         if (confirmEndTask) {
-          await completeTask(selectedDetailTask.detail_task_id);  
+          await completeTask(selectedDetailTask.detail_task_id);
           alert('タスクが完了しました！');
         }
       }
@@ -77,6 +108,7 @@ const Study = () => {
       setError('ChatGPTとの通信中にエラーが発生しました。');
     }
   };
+  
 
   // タスク手動完了ボタンの処理
   const handleCompleteClick = async () => {

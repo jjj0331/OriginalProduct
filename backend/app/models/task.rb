@@ -1,6 +1,5 @@
 class Task < ApplicationRecord
   belongs_to :guideline
-
   has_many :detail_tasks, dependent: :destroy 
   has_many :user_statuses,dependent: :destroy
   

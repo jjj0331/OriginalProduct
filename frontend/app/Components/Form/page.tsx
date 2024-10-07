@@ -79,6 +79,20 @@ const Form = () => {
       return;
     }
 
+              // バリデーションチェック: 各Todoの詳細タスクのタイトルと内容
+              const hasEmptyDetails = todos.some(todo => {
+                if (todo.detail_tasks.length === 0) {
+                  alert("すべてのTodolistには最低一つのクエストを設定してください。");
+                  return true;
+                }
+                return todo.detail_tasks.some(detail => !detail.detailtitle?.trim() || !detail.detailcontent?.trim());
+              });
+    
+              if (hasEmptyDetails) {
+                alert("すべてのクエストには内容と回答を入力してください。");
+                return;
+              }
+
     //ガイドラインの内容を登録するためにデータを整形
     try {
       const guideline = {

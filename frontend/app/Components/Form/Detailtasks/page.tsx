@@ -1,17 +1,17 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-const Detailsform = ({ closeDetail, todo, index, updateTodoDetails }) => {//メインのフォームからいくつか関数を受け取る
-
+const Detailsform = ({ closeDetail, todo, index, updateTodoDetails }) => {
   //サブフォルダーの内容を管理する
   const [items, setItems] = useState([{ detailtitle: '', detailcontent: '', _destroy: false }]);
-
+  // エラーメッセージを管理
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     if (todo && todo.detail_tasks && todo.detail_tasks.length > 0) {
       setItems(todo.detail_tasks.map(detail => ({
         ...detail,
-        _destroy: false, 
+        _destroy: false,
       })));
     }
   }, [todo]);
@@ -24,7 +24,7 @@ const Detailsform = ({ closeDetail, todo, index, updateTodoDetails }) => {//メ�
   const removeDetails = (index) => {
     const newItems = [...items];
     if (newItems[index].id) {
-      newItems[index]._destroy = true; 
+      newItems[index]._destroy = true;
     } else {
       newItems.splice(index, 1);
     }
@@ -44,6 +44,13 @@ const Detailsform = ({ closeDetail, todo, index, updateTodoDetails }) => {//メ�
   };
 
   const handleSaveAndClose = () => {
+    // バリデーションチェック
+    const hasEmptyFields = items.some(item => !item.detailtitle.trim() || !item.detailcontent.trim());
+    if (hasEmptyFields) {
+      setErrorMessage('すべてのクエストにはタイトルと答えを入力してください。');
+      return; // 空欄がある場合は処理を中断
+    }
+
     updateTodoDetails(index, items); // 入力内容を保存
     closeDetail();                   // フォームを閉じる
   };
@@ -52,6 +59,10 @@ const Detailsform = ({ closeDetail, todo, index, updateTodoDetails }) => {//メ�
     <div className='fixed inset-0 bg-gray-800 bg-opacity-75 overflow-y-auto flex justify-center items-center'>
       <form className="bg-white w-full max-w-3xl mx-auto border-2 border-gray-300 rounded shadow-lg px-6 py-8">
         <h1 className="text-2xl font-bold text-gray-700 mb-6 text-center">クエスト作成フォーム</h1>
+
+        {/* エラーメッセージの表示 */}
+        {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
+
         {items.filter(item => !item._destroy).map((item, idx) => (
           <div className='mb-4 border-b-2 border-black' key={idx}>
             <div className="mb-4 flex items-center">

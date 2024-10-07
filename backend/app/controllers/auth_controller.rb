@@ -41,6 +41,7 @@ class AuthController < ApplicationController
   def show
     begin
       @user = User.find(params[:id])
+      
       if @user
         render json: { message: 'ユーザが見つかりました' ,user: @user}, status: :ok
       else
