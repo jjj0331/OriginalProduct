@@ -21,7 +21,8 @@ Rails.application.routes.draw do
   get 'current_user/favoriteguidelines', to: 'user_statuses#show_user_status'
   get 'userguidelines/:id',              to: 'user_statuses#show_user_one_status'
 
-
-
+  #【個人設定】
+  post 'personalsettings',             to: 'user_statuses#update_personal_settings'
+  get  'personalsettings',             to: 'user_statuses#get_personal_settings'
 
 end

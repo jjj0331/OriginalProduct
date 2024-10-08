@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_26_130748) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_08_124243) do
   create_table "detail_tasks", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -59,6 +59,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_26_130748) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.json "personal_settings"
   end
 
   add_foreign_key "detail_tasks", "tasks"

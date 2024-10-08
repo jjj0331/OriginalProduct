@@ -4,7 +4,7 @@ import { TokenContext } from '../context/TokenContext';
 import MyFavorites from '../Components/My/Favorites/page';
 import Form from '../../app/Components/Form/page';
 import MyGuidlines from '../Components/My/Guidlines/page';
-
+import PersonalSettings from '../Components/My/PersonalSettings/page';
 const Guidlines = () => {
   const { loginuser_id } = useContext(TokenContext);
   const [activeIndex, setActiveIndex] = useState(1);
@@ -17,7 +17,7 @@ const Guidlines = () => {
     <div className='mt-6 w-full px-4 mx-auto'> 
       <div className="p-4"> 
         <ul className='flex gap-0 rounded-t-lg overflow-hidden'>
-          {['お気に入り', '新規作成', '編集'].map((label, index) => (
+          {['お気に入り', '新規作成', '編集','個人設定'].map((label, index) => (
             <li 
               key={index}
               className={`px-4 sm:px-6 py-2 cursor-pointer text-xs sm:text-sm md:text-base ${
@@ -46,6 +46,11 @@ const Guidlines = () => {
           {activeIndex === 3 && (
             <div>
               <MyGuidlines />
+            </div>
+          )}
+          {activeIndex === 4 && (
+            <div>
+              <PersonalSettings />
             </div>
           )}
         </div>

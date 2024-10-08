@@ -124,7 +124,35 @@ class UserStatusesController < ApplicationController
       render json: { message: 'タスクステータスが更新されました' }, status: :ok
     end
   end
-  
-  
+
+#=======================================================================================  
+#【個人設定】
+  #個人設定を取得する
+  def get_personal_settings
+    if current_user.nil?
+      render json: { error: 'ユーザーが見つかりません' }, status: :unprocessable_entity
+    else
+      render json: current_user.personal_settings, status: :ok
+    end
+  end
+
+  # 個人設定を更新する
+  def update_personal_settings
+    # current_userを使って、認証されたユーザーの情報を取得
+    if current_user.update_attribute(:personal_settings, personal_settings_params[:goal])
+      render json: { message: '個人設定が更新されました' }, status: :ok
+    else
+      # エラーメッセージをログ出力して、失敗理由を特定
+      Rails.logger.error("バリデーションエラー: #{current_user.errors.full_messages}")
+      render json: { error: '個人設定の更新に失敗しました', details: current_user.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  # パラメータ制御
+  private
+
+  def personal_settings_params
+    params.require(:personal_settings).permit(:goal)
+  end
 
 end
