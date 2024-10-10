@@ -4,11 +4,13 @@
 //【各種関数をインポート】
 import React, { useEffect, useContext, useState } from 'react';//状態を管理する関数
 import { useParams } from 'next/navigation';//URLのidを取得
-import { fetchData, sendToChatGPT, postData } from '../../services/fetch';//servicesをインポート
+import { fetchData,  postData } from '../../services/fetch';
+import {sendToChatGPT } from '../../services/chatgpt';
 import { TokenContext } from '../../context/TokenContext';//token管理
 
 const Study = () => {
-  
+
+//---------------------------------------------------------------------------
   //【各種変数宣言】
   //Tokenを取得
   const { accessToken } = useContext(TokenContext);
@@ -28,25 +30,24 @@ const Study = () => {
   const { id } = useParams();
 
 //---------------------------------------------------------------------------
-  // 【初回レンダリング時のガイドラインデータの取得】
+  //【初回レンダリング時のガイドラインデータの取得】
   const fetchGuidelineDetails = async () => {
     try {
       const data = await fetchData(`/userguidelines/${id}`, {}, accessToken);
-      setDatas(data); // データをstateに設定
-      //return data;    // データを返す
+      setDatas(data); 
     } catch (error) {
       console.error('ガイドラインの取得中にエラーが発生しました', error.response?.data?.message || error.message);
       setError('ガイドラインの取得に失敗しました。');
     }
   };
 
+  //useEffectにて,id, accessTokenを管理し
+  //fetchGuidelineDetails関数の実行タイミングを管理
   useEffect(() => {
-    //idとTokenがある場合のみ実行
     if (id && accessToken) {
       fetchGuidelineDetails();
     }
   }, [id, accessToken]);
-//---------------------------------------------------------------------------
 
 //---------------------------------------------------------------------------
  // 【タスク完了処理】
@@ -68,7 +69,8 @@ const Study = () => {
     }
   };
 
-  // フォーム送信処理
+//---------------------------------------------------------------------------
+  // 【フォーム送信処理】
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -79,10 +81,13 @@ const Study = () => {
   
       // ChatGPT APIへのリクエスト（chatHistoryも渡す）
       const response = await sendToChatGPT(inputText, selectedDetailTask.detail_task_title, selectedDetailTask.detail_task_description, chatHistory);
-  
+      
+      //responseをchatHistoryに格納
       const gptMessage = { role: 'assistant', content: response };
+      //配列の追加
       setChatHistory(prev => [...prev, gptMessage]);
-  
+
+      //入力フォームを初期化
       setInputText('');
   
       // 会話履歴の全体の文字数を計算

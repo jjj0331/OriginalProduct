@@ -103,6 +103,34 @@ class UserStatusesController < ApplicationController
     end
   end
   
+  def show_user_ok_guidelines
+    current_user
+    user_statuses = UserStatus.includes(guideline: { tasks: :detail_tasks })
+                              .where(user_id: @current_user.id, status: 1)
+                              
+    # データが空の場合のエラーハンドリング
+    if user_statuses.blank?
+      render json: { error: 'No completed guidelines found for the current user.' }, status: :unprocessable_entity
+      return
+    end
+
+    data = user_statuses.group_by { |user_status| user_status.guideline }.map do |guideline, statuses|
+      {
+        guideline: {
+          title: guideline.title,
+          description: guideline.description
+        },
+        tasks: statuses.map do |user_status|
+          {
+            task_title: user_status.task.title,
+            detail_task_title: user_status.detail_task.title
+          }
+        end
+      }
+    end
+
+    render json: data, status: :ok
+  end
 
 
   def update_user_status
