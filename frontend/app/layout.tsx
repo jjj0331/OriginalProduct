@@ -2,6 +2,7 @@ import "./globals.css"; //globals.cssをインポート
 import Header from "./Header"; //frontend\app\Header.tsxをインポート
 import { TokenProvider } from './context/TokenContext'; //TokenContextをインポート
 
+
 //metadataでは、ブラウザの上に表示される名前と概要を指定
 export const metadata = {
   title: "みんなのガイドライン",
@@ -13,9 +14,11 @@ export default function RootLayout(
   {children,}: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en" className="bg-main_color font-noto-sans-cjk h-full">
       <body className="relative mx-auto mt-1 h-full flex flex-col">
+        
         {/* TokenContextの役割は[]に記載 */}
         <TokenProvider>
           {/* ヘッダー部分はすべての画面遷移で表示のためここに記載 */}

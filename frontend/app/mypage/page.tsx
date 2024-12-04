@@ -1,22 +1,29 @@
 "use client";
+
 import React, { useContext, useState } from 'react';
 import { TokenContext } from '../context/TokenContext';
-import MyFavorites from '../Components/My/Favorites/page';
-import Form from '../../app/Components/Form/page';
-import MyGuidlines from '../Components/My/Guidlines/page';
+import MyFavorites from      '../Components/My/Favorites/page';
+import Form from             '../../app/Components/Form/page';
+import MyGuidlines from      '../Components/My/Guidlines/page';
 import PersonalSettings from '../Components/My/PersonalSettings/page';
-const Guidlines = () => {
-  const { loginuser_id } = useContext(TokenContext);
-  const [activeIndex, setActiveIndex] = useState(1);
 
+const MyPage = () => {
+  //ログインユーザのidを管理
+  const { loginuser_id } = useContext(TokenContext);
+  //現在選択しているタブ番号を管理
+  const [activeIndex, setActiveIndex] = useState(1);
+  
+  //選択しているタブ番号を更新する関数
   const changeShow = (index) => {
     setActiveIndex(index);
   };
 
   return (
-    <div className='mt-6 w-full px-4 mx-auto'> 
+    <div className='mt-6 w-full px-12 mx-auto'> 
+
       <div className="p-4"> 
         <ul className='flex gap-0 rounded-t-lg overflow-hidden'>
+          {/* Loopでli要素を作成:CSS条件付きかつ、onClick関数もついている */}
           {['お気に入り', '新規作成', '編集','個人設定'].map((label, index) => (
             <li 
               key={index}
@@ -55,14 +62,8 @@ const Guidlines = () => {
           )}
         </div>
       </div>
-      <div className="flex justify-end">
-        <a href="/" className='block sm:inline-block border-2 rounded-lg my-2 sm:my-0 py-2 px-4 bg-red-500 font-bold flex items-center mr-4'>
-          <i className="fa-solid fa-user"></i>
-          <span className='ml-2 text-white'>ログアウト</span>
-        </a>
-      </div>
     </div>
   );
 }
 
-export default Guidlines;
+export default MyPage;

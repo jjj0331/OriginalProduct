@@ -7,9 +7,9 @@ import { useParams } from 'next/navigation';//URLのidを取得
 import { fetchData,  postData } from '../../services/fetch';
 import {sendToChatGPT } from '../../services/chatgpt';
 import { TokenContext } from '../../context/TokenContext';//token管理
+import Loading  from '../../Components/Loading/page';
 
 const Study = () => {
-
 //---------------------------------------------------------------------------
   //【各種変数宣言】
   //Tokenを取得
@@ -128,6 +128,9 @@ const Study = () => {
     }
   };
 
+  if (!datas) {
+    return <Loading />;
+  }
   return (
     <div className="flex min-h-screen">
       <div className="flex-grow w-1/5 p-3 border-black border-r-4">

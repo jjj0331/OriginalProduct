@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
@@ -7,6 +8,7 @@ import { TokenContext } from '../../context/TokenContext';
 import { fetchData, postData } from '../../services/fetch'; // 共通のAPIクライアントを使用
 
 const Carddetail = () => {
+  
   const { accessToken } = useContext(TokenContext);
   const [datas, setDatas] = useState({});
   const { id } = useParams();
@@ -60,14 +62,17 @@ const Carddetail = () => {
       ))}
 
       <Link href="/">
-        <button className='mt-6 px-4 py-2 bg-gray-300 border rounded-lg'>
+        <button className='mt-6 px-4 py-2 bg-gray-300 border rounded-lg hover:bg-gray-600 '>
           戻る
         </button>
       </Link>
 
-      <button onClick={AddMyFavorite} className='ml-4 mt-6 px-4 py-2 bg-orange-300 border rounded-lg'>
-        Mylistに追加
+
+      <button onClick={AddMyFavorite} className='ml-4 mt-6 px-4 py-2 bg-orange-300 border rounded-lg hover:bg-orange-900'>
+        ★お気に入りに追加
       </button>
+
+
     </div>
   );
 }

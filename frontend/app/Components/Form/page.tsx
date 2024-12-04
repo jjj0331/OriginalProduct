@@ -117,7 +117,7 @@ const Form = () => {
   };
 
   return (
-    <div className='mx-auto w-full sm:w-10/12 md:w-8/12 lg:w-8/12 xl:w-8/12 mt-6'>
+    <div className='mt-4 mx-8'>
       {/* isDetailVisibleがTrue及び対象のTodoが定まったいる場合、
       サブフォームを表示 */}
       {isDetailVisible && currentTodoIndex !== null ? (
@@ -173,7 +173,7 @@ const Form = () => {
                       onClick={() => removeItem(index)} 
                       className='flex-shrink-0 px-2 py-2 border-2 rounded-lg bg-red-700 text-white font-bold'
                     >
-                      削除
+                      ー
                     </button>
                   </div>
                 </div>
