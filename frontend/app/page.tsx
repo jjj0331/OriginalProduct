@@ -6,15 +6,35 @@ import Serch   from "./Components/Serch/page";
 import Loading from "./Components/Loading/page";
 import Welcome   from "./Components/Welcome/page";
 
-export default function Home() {
-  //初回レンダリングの際に説明のポップアップを表示のFLG
-  const [flg,setFlg]=useState(true);
+// Cookieを取得する関数
+export function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return null;
+}
 
-  const ChangeFlg=()=>{
-  
-    setFlg(false);
-  };
-  
+// Cookieを設定する関数
+export function setCookie(name, value, days) {
+  const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
+  document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+}
+
+export default function Home() {
+  // // 初回ログインフラグ
+  // const [flg, setFlg] = useState(false);
+
+  // // 初回レンダリング時にCookieを確認
+  // useEffect(() => {
+  //   const flgCookie = getCookie('flg');
+  //   if (!flgCookie) {
+  //     setFlg(true); // 初回ログインと判定
+  //     setCookie('flg', 'true', 365); // Cookieを365日間保存
+  //   }
+  // }, []);
+  const flg=false;
+
+
   // 検索フォームに打ち込まれた内容を管理
   const [inputdata, setInputdata] = useState("");
   // 表示するデータ(ガイドライン)
@@ -65,7 +85,7 @@ export default function Home() {
   }, [inputdata]);
 
   return (
-    flg?(<Welcome onClose={ChangeFlg}/>):(
+    flg?(<Welcome/>):(
     <main>
       <Serch getInputValue={getInputValue} />
       {loading ? (<Loading /> /* ローディング中*/ ) 

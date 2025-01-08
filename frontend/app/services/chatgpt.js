@@ -3,7 +3,7 @@ import axios from 'axios';
 //エンドポイントの設定
 const gptClient = axios.create({
   baseURL: `https://api.openai.com/v1/chat/completions`,
-  timeout: 2000,
+  timeout: 10000,
 });
 
 //【開発メモ：ChatGPTのAPIについて】
@@ -42,7 +42,8 @@ export const summarizeChatHistory = async (chatHistory) => {
     //ChatGPT空の回答の中からAIによる要約部分のみ返り値として返す
     return response.data.choices[0].message.content.trim();
 
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Error in summarizeChatHistory:', error);
     console.error('Response data:', error.response?.data);
     throw error;
@@ -103,7 +104,7 @@ export const sendToChatGPT = async (
             `
           }
         ],
-        max_tokens: 100,
+        max_tokens: 1000,
       },
       {
         headers: {
@@ -120,7 +121,8 @@ export const sendToChatGPT = async (
   }
 };
 
-export const advicefromChatGPT = async (goal, CompletedQuest) => {
+// 目標設定するための関数
+export const advicefromChatGPT = async (goal, retries = 2) => {
   const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 
   try {
@@ -137,14 +139,11 @@ export const advicefromChatGPT = async (goal, CompletedQuest) => {
             role: 'user', 
             content: `
               目標：${goal}
-              データ: ${CompletedQuest}
-              
-              目標に対してデータの内容の課題をクリアしました。
-              さらにアドバイスをください
+              目標に対して学習すべき内容を500文字以内でアドバイスしてください。
             `
           }
         ],
-        max_tokens: 100,
+        max_tokens: 500,
       },
       {
         headers: {
@@ -155,8 +154,14 @@ export const advicefromChatGPT = async (goal, CompletedQuest) => {
     );
     return response.data.choices[0].message.content.trim();
   } catch (error) {
-    console.error('Error in advicefromChatGPT:', error);
-    console.error('Response data:', error.response?.data);
-    throw error;
+    // エラーがタイムアウトで再試行回数が残っている場合
+    if (error.code === 'ECONNABORTED' && retries > 0) {
+      console.warn('Timeout occurred, retrying...', { retriesLeft: retries - 1 });
+      return await advicefromChatGPT(goal, retries - 1);
+    }
+
+    // 再試行回数が尽きた場合
+    console.error('Error in advicefromChatGPT:', error.message, error.response?.data || 'No response data');
+    return "ChatGPTからデータを取得できませんでした。";
   }
 };

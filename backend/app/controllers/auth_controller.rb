@@ -4,11 +4,18 @@ class AuthController < ApplicationController
 
   #登録
   def create
+    #ユーザー名が既に存在するのか確認
+    if User.exists?(username: params[:user][:username])
+      render json: { error: 'ユーザーが既に存在します、別のユーザー名を登録してください' }, status: :unauthorized
+      return
+    end
+
+    #ユーザー登録の処理
     @user = User.new(user_params)
 
     if @user.save
-      access_token = JsonWebToken.create_token(@user.id)
-      refresh_token = JsonWebToken.create_token(@user.id, 7.days.from_now)
+      access_token  = JsonWebToken.create_token(@user.id, 1.days.from_now)
+      refresh_token = JsonWebToken.create_token(@user.id, 1.days.from_now)
       render json: { access_token: access_token, refresh_token: refresh_token }, status: :ok
     else
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
@@ -18,15 +25,23 @@ class AuthController < ApplicationController
   # ログイン
   def login
     user = User.find_by(username: params[:user][:username])
-    
+  
     if user && user.authenticate(params[:user][:password])
-      access_token = JsonWebToken.create_token(user.id)
-      refresh_token = JsonWebToken.create_token(user.id, 7.days.from_now)
+      # ユーザーが存在し、パスワードが一致する場合
+      access_token = JsonWebToken.create_token(user.id, 1.days.from_now)
+      refresh_token = JsonWebToken.create_token(user.id, 1.days.from_now)
       render json: { access_token: access_token, refresh_token: refresh_token }, status: :ok
+  
+    elsif user
+      # ユーザー名が存在するがパスワードが間違っている場合
+      render json: { error: 'ユーザーが既に存在しますが、パスワードが間違っています' }, status: :unauthorized
+  
     else
-      render json: { error: 'Invalid username or password' }, status: :unauthorized
+      # ユーザーが存在しない場合
+      render json: { error: 'ユーザーが存在しません' }, status: :not_found
     end
   end
+  
 
   #ユーザの参照
   def showloginuser

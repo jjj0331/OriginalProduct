@@ -18,13 +18,13 @@ const Serch = ({ getInputValue }) => {//引数にgetInputValue関数を受け取
 
   return (
     <div>
-      <form id="form1" action="" className="flex justify-center h-14 mt-5" >
+      <form id="form1" action="" className="flex justify-center h-14 mt-5 autofill:bg-white" >
         <input
           id="sbox1"
           name="s"
           type="text"
           placeholder="キーワードを入力"
-          className="w-6/12 px-4 py-2 bg-white border-none outline-none rounded-l-md"
+          className="w-6/12 px-4 py-2 bg-white border-none outline-none rounded-l-md focus:bg-white autofill:bg-white autofill:text-black"
           value={inputValue}
           //onChangeはイベントハンドラーでinputの内容が変更したら発火
           onChange={handleChange}

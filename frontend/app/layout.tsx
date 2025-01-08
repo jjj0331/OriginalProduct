@@ -1,7 +1,6 @@
-import "./globals.css"; //globals.cssをインポート
+import "./globals.css";        //globals.cssをインポート
 import Header from "./Header"; //frontend\app\Header.tsxをインポート
 import { TokenProvider } from './context/TokenContext'; //TokenContextをインポート
-
 
 //metadataでは、ブラウザの上に表示される名前と概要を指定
 export const metadata = {
@@ -11,9 +10,7 @@ export const metadata = {
 
 //ユーザー画面の大枠
 export default function RootLayout(
-  {children,}: Readonly<{
-  children: React.ReactNode;
-}>) {
+  {children,}: Readonly<{children: React.ReactNode;}>){
 
   return (
     <html lang="en" className="bg-main_color font-noto-sans-cjk h-full">
@@ -23,9 +20,9 @@ export default function RootLayout(
         <TokenProvider>
           {/* ヘッダー部分はすべての画面遷移で表示のためここに記載 */}
           <Header />
-
           {/* 子要素と背景画像のコンテナ */}
           <div className="relative flex-grow">
+
             {/* 背景画像を表示するdivを配置、topを指定してヘッダーの下に表示 */}
             <div className="absolute left-0 right-0 flex justify-center items-center z-0 opacity-20" style={{ top: '0px' }}>
               <img 
@@ -34,13 +31,11 @@ export default function RootLayout(
                 className="w-auto object-cover"
               />
             </div>
-
             {/* 子要素を表示 */}
             <div className="relative z-10 h-full">
               {children}
             </div>
           </div>
-
         </TokenProvider>  
       </body>
     </html>

@@ -48,7 +48,7 @@ const Header = () => {
       </div>
       
       {/* メニュー部分 */}
-      <div className={`absolute top-16 left-0 w-full z-50 sm:relative sm:top-0 sm:left-0 sm:w-auto flex-col sm:flex sm:flex-row sm:items-center sm:space-x-5 bg-white dark:bg-gray-800 sm:bg-transparent ${isOpen ? 'flex bg-gray-200' : 'hidden'}`}>
+      <div className={`absolute top-16 left-0 w-full z-5 sm:relative sm:top-0 sm:left-0 sm:w-auto flex-col sm:flex sm:flex-row sm:items-center sm:space-x-5 bg-white dark:bg-gray-800 sm:bg-transparent ${isOpen ? 'flex bg-gray-200' : 'hidden'}`}>
         
           <Link href="/" className='block sm:inline-block hover:bg-selected-bg my-2 sm:my-0 py-2 px-4 rounded-lg' onClick={closeMenu} >
             ホーム

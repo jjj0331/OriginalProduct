@@ -28,6 +28,8 @@ const Study = () => {
   const [error, setError] = useState(null);
   //ページのidを取得および格納
   const { id } = useParams();
+  //Task表示
+  const [flg,setFlg]=useState(true);
 
 //---------------------------------------------------------------------------
   //【初回レンダリング時のガイドラインデータの取得】
@@ -132,90 +134,130 @@ const Study = () => {
     return <Loading />;
   }
   return (
-    <div className="flex min-h-screen">
-      <div className="flex-grow w-1/5 p-3 border-black border-r-4">
-        <h1 className="text-xl mb-6 text-black">
-          学習内容: {datas.guideline_title}
-        </h1>
+    <div>
+      {flg ? (
+        <div className="w-2/5 p-3 mx-auto text-center mt-8">
+          <h1 className="text-3xl mb-6 text-black">
+            学習内容: {datas.guideline_title}
+          </h1>
+  
+          {datas.tasks && datas.tasks.length > 0 ? (
+            datas.tasks.map((task, index) => (
+              <div key={index} className="mb-4">
+                <button
+                  onClick={() => {
+                    setSelectedTask(task);
+                    setSelectedDetailTask(null);
+                    setChatHistory([]);
+                  }}
+                  className="text-xl mx-auto text-center block hover:underline p-2 rounded-lg bg-blue-200 hover:bg-blue-300 text-blue-800 transition-all"
+                >
+                  {index + 1}: {task.task_title}
+                </button>
+  
+                {selectedTask?.task_id === task.task_id && task.detail_tasks && (
+                  <div className="pl-4 mt-2">
+                    {task.detail_tasks.map((detail_task, detailIndex) => (
+                      <button
+                        key={detailIndex}
+                        onClick={() => {
+                          setSelectedDetailTask(detail_task);
+                          setChatHistory([]);
+                          setFlg(false);
+                        }}
+                        className={`mx-auto text-center block p-2 mt-1 rounded-lg transition-all hover:bg-orange-400
+                          ${
+                            detail_task.status
+                              ? "bg-gray-400 text-gray-700"
+                              : "bg-white text-blue-600 border border-blue-400"
+                          } 
+                          ${
+                            selectedDetailTask?.detail_task_id === detail_task.detail_task_id
+                              ? "font-bold bg-blue-300"
+                              : ""
+                          }`}
+                      >
+                        - {detail_task.detail_task_title}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <p className="text-blue-700">タスクが見つかりません。</p>
+          )}
+        </div>
+      ) : (
 
-        {datas.tasks && datas.tasks.length > 0 ? (
-          datas.tasks.map((task, index) => (
-            <div key={index} className="mb-4">
-              <button 
-                onClick={() => {
-                  setSelectedTask(task);
-                  setSelectedDetailTask(null);
-                  setChatHistory([]);
-                }}
-                className="block hover:underline p-2 rounded-lg bg-blue-200 hover:bg-blue-300 text-blue-800 transition-all">
-                {index + 1}: {task.task_title}
-              </button>
+        <div className="w-10/12 mx-auto min-h-screen p-2 relative">
+          
+  
+          {selectedDetailTask ? (
+            <>
+              <button className="p-2 w-full bg-blue-500 text-white mx-auto  rounded-lg hover:bg-blue-600 transition-all" onClick={() => setFlg(true)}>Qusetを変更する</button>
 
-              {selectedTask?.task_id === task.task_id && task.detail_tasks && (
-                <div className="pl-4 mt-2">
-                  {task.detail_tasks.map((detail_task, detailIndex) => (
-                    <button 
-                      key={detailIndex}
-                      onClick={() => {
-                        setSelectedDetailTask(detail_task);
-                        setChatHistory([]);
-                      }}
-                      className={`block p-2 mt-1 rounded-lg transition-all 
-                        ${detail_task.status ? 'bg-gray-400 text-gray-700' : 'bg-white text-blue-600 border border-blue-400'} 
-                        ${selectedDetailTask?.detail_task_id === detail_task.detail_task_id ? 'font-bold bg-blue-300' : ''}`}>
-                      - {detail_task.detail_task_title}
-                    </button>
+              <div>  
+                <h1 className="mt-4 border-b-2 border-black text-2xl text-black">
+                  Quest:
+                  <i className="font-bold text-blue-600 px-4">
+                    {selectedDetailTask.detail_task_title}
+                  </i>
+                </h1>
+
+                
+
+                
+                <div className="mb-4 mt-6">
+                  {chatHistory.map((message, index) => (
+                    <div
+                      key={index}
+                      className={`p-3 rounded-lg mb-4 ${
+                        message.role === "user"
+                          ? "text-right bg-blue-100"
+                          : "text-left bg-gray-100"
+                      }`}
+                    >
+                      <span className="block">{message.content}</span>
+                    </div>
                   ))}
                 </div>
-              )}
-            </div>
-          ))
-        ) : (
-          <p className="text-blue-700">タスクが見つかりません。</p>
-        )}
-      </div>
-
-      <div className="flex flex-col w-4/5 min-h-screen p-6 relative">
-        {selectedDetailTask ? (
-          <>
-            <div className="py-4 flex-grow overflow-y-auto">
-              <h1 className="border-b-2 border-black text-2xl text-black">Quest: 
-                <i className="font-bold text-blue-600 px-4">{selectedDetailTask.detail_task_title}</i>
-              </h1>
-              <div className="mb-4 mt-6">
-                {chatHistory.map((message, index) => (
-                  <div key={index} className={`p-3 rounded-lg mb-4 ${message.role === 'user' ? 'text-right bg-blue-100' : 'text-left bg-gray-100'}`}>
-                    <span className="block">{message.content}</span>
-                  </div>
-                ))}
               </div>
-            </div>
-
-            <form onSubmit={handleSubmit} className="fixed bottom-0 right-0 w-4/5 mb-2 px-12 border-blue-300 flex items-center">
-              <input 
-                type="text" 
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                placeholder="ここに入力してください" 
-                className="flex-grow p-2 border-2 border-blue-300 rounded-lg" 
-              />
-              <button type="submit" className="p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all">
-                送信
-              </button>
-              <button 
-                type="button" 
-                className='ml-1 p-3 bg-gray-300 border rounded-lg border-black'
-                onClick={handleCompleteClick}>
+  
+              <form
+                onSubmit={handleSubmit}
+                className="fixed bottom-0 right-0 w-full mb-2 px-32 border-blue-300 flex items-center"
+              >
+                <input
+                  type="text"
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  placeholder="ここに入力してください"
+                  className="flex-grow p-2 border-2 border-blue-300 rounded-lg"
+                />
+                <button
+                  type="submit"
+                  className="p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all"
+                >
+                  送信
+                </button>
+                <button
+                  type="button"
+                  className="ml-1 p-3 bg-gray-300 border rounded-lg border-black"
+                  onClick={handleCompleteClick}
+                >
                   完了
-              </button>
-            </form>
-          </>
-        ) : (
-          <p className="text-blue-700 mt-2">タスクまたは詳細タスクを選択してください。</p>
-        )}
-      </div>
+                </button>
+              </form>
+            </>
+          ) : (
+            <p className="text-blue-700 mt-2">タスクまたは詳細タスクを選択してください。</p>
+          )}
+        </div>
+      )}
     </div>
   );
+  
 }
 
 export default Study;

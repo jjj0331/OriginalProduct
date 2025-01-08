@@ -22,14 +22,14 @@ const Carddetail = () => {
 
     try {
       await postData(`/userguidelines/${id}`, {} ,accessToken);
-      alert("Mylistに追加しました");
+      alert("お気に入りに追加しました");
     } catch (error) {
       if (error.response?.status === 422 && error.response?.data?.error === 'すでに登録されています') {
         alert("すでに登録されています");
       } else {
-        alert("Mylistへの追加に失敗しました");
+        alert("お気に入りへの追加に失敗しました");
       }
-      console.error('Mylistへの追加中にエラーが発生しました', error.response?.data?.message || error.message);
+      console.error('お気に入りへの追加中にエラーが発生しました', error.response?.data?.message || error.message);
     }
   };
 

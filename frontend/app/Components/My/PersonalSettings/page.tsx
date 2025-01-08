@@ -4,65 +4,56 @@ import React, { useContext, useState, useEffect } from 'react';
 import { TokenContext } from '../../../context/TokenContext';
 import { postData, fetchData } from '../../../services/fetch';
 import { advicefromChatGPT  } from '../../../services/chatgpt';
-
+import Loading from "../../Loading/page";
 export default function PersonalSettings() {
   const { accessToken } = useContext(TokenContext);
   const [goal, setGoal] = useState<string>(''); // goalを文字列として扱う
-  const [completedQuest, setCompletedQuest] = useState();
-  const [advice, setAdvice] = useState('');
+  const [advice, setAdvice] = useState('設定を更新ボタンを押すとChatGPTからアドバイスが得られます');
 
   // データ取得のための関数
   useEffect(() => {
     const fetchPersonalData = async () => {
       try {
-        // 両方のデータを同時に取得する
-        const [goalData, questData] = await Promise.all([
-          fetchData('/personalsettings', {}, accessToken),
-          // fetchData('/current_user/ok/guidelines', {}, accessToken)
+        const [goalData] = await Promise.all([
+          fetchData('/personalsettings', {}, accessToken)
         ]);
   
-        // 目標データが存在する場合は状態を更新、存在しない場合はデフォルトのメッセージを設定
         if (goalData) {
           setGoal(goalData);
         } else {
           setGoal('ガイドラインデータが存在しません');
         }
-  
-        // 完了したクエストデータを設定
-        if (questData) {
-          setCompletedQuest(questData);
-        } else {
-          console.warn('完了したクエストデータが存在しません');
-        }
-  
       } catch (error) {
         console.error('データの取得に失敗しました', error);
       }
     };
   
-    // データ取得を実行
     fetchPersonalData();
   }, [accessToken]);
   
 
-  // アドバイスを更新する
-  useEffect(() => {
-    if (goal && completedQuest) {
-      const newAdvice = advicefromChatGPT(goal, completedQuest);
-      setAdvice(newAdvice);
+  const fetchAdvice = async (goal) => {
+    try {
+      const advice = await advicefromChatGPT(goal);
+      setAdvice(advice);
+    } catch (error) {
+      alert('アドバイスの取得に失敗しました');
     }
-  }, [goal, completedQuest]);
-
-  // 個人設定を更新する関数
+  };
+  
+  // updatePersonalSettings 関数
   const updatePersonalSettings = async () => {
     try {
       const data = { personal_settings: { goal } };
       await postData('/personalsettings', data, accessToken);
       alert('個人設定が更新されました');
+      setAdvice(null);
+      await fetchAdvice(goal);
     } catch (error) {
       alert('個人設定の更新に失敗しました');
     }
   };
+  
 
   // 入力の変更を処理する関数
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,8 +75,8 @@ export default function PersonalSettings() {
       </button>
       <br />
       <br />
-      <label className='mt-4 font-bold mr-4'>ChatGPTからのアドバイス</label>
-      <i>{advice}</i>
+      <label className='mt-4 font-bold mr-4'>ChatGPTからのアドバイス</label><br />
+      {advice ? (<i>{advice}</i>) : (<Loading />)}
       <br />
     </div>
   );
