@@ -104,7 +104,7 @@ const Study = () => {
       }
   
       if (response === 'クエストクリア') {
-        const confirmEndTask = confirm('このタスクを終了させますか？');
+        const confirmEndTask = confirm('クエストクリアしました、このタスクを終了させますか？');
         if (confirmEndTask) {
           await completeTask(selectedDetailTask.detail_task_id);
           alert('タスクが完了しました！');

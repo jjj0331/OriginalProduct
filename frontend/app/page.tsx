@@ -22,17 +22,17 @@ export function setCookie(name, value, days) {
 
 export default function Home() {
   // // 初回ログインフラグ
-  // const [flg, setFlg] = useState(false);
+  const [flg, setFlg] = useState(false);
 
-  // // 初回レンダリング時にCookieを確認
-  // useEffect(() => {
-  //   const flgCookie = getCookie('flg');
-  //   if (!flgCookie) {
-  //     setFlg(true); // 初回ログインと判定
-  //     setCookie('flg', 'true', 365); // Cookieを365日間保存
-  //   }
-  // }, []);
-  const flg=false;
+  // 初回レンダリング時にCookieを確認
+  useEffect(() => {
+    const flgCookie = getCookie('flg');
+    if (!flgCookie) {
+      setFlg(true); // 初回ログインと判定
+      setCookie('flg', 'true', 365); // Cookieを365日間保存
+    }
+  }, []);
+  // const flg=false;
 
 
   // 検索フォームに打ち込まれた内容を管理

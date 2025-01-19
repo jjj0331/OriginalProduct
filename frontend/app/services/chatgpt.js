@@ -90,8 +90,8 @@ export const sendToChatGPT = async (
 
               私の回答: ${inputText}
 
-              ${inputText}が${detailTaskDescription}の内容がおおよそ一致しており、
-              ${detailTaskTitle}の内容を理解してい場合は
+              ${inputText}が${detailTaskTitle}に対する${detailTaskDescription}
+              という答えにおおよそ一致している場合は
               「クエストクリア」のみを返答してください。
         
 

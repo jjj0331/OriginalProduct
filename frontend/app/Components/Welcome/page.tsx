@@ -1,15 +1,15 @@
-
 const Welcome = () => {
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="w-3/4 max-h-[100vh] m-auto mt-6 bg-white relative overflow-x-hidden overflow-y-auto shadow-lg rounded-lg border border-gray-300 p-4">
+    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center">
+      <div className="w-2/4 max-h-[100vh] m-auto mt-6 bg-white relative overflow-x-hidden overflow-y-auto shadow-lg rounded-lg border border-gray-600 p-4">
 
         {/* 閉じるボタン */}
         <a href="/">
           <button
             className="bg-gray-300 font-bold text-2xl rounded-full w-8 h-8 border-4 border-black flex items-center justify-center absolute top-0 right-0 z-8"
-          >×</button>
+          >
+            ×
+          </button>
         </a>
 
         {/* ヘッダー */}
@@ -21,43 +21,20 @@ const Welcome = () => {
         </main>
 
         {/* リスト */}
-        <ul className="text-left p-4 space-y-2 ">
-        <li>
-          <p>対象のガイドラインを探す</p>
-
-          <iframe
-            src="https://www.youtube.com/embed/ZjpHvDz4gis?loop=1&playlist=ZjpHvDz4gis"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            style={{
-              width: "40%",
-              height: "100%"
-            }}
-          ></iframe>
-        </li>
-
-        <li>
-          <p>対象のガイドラインを探す</p>
-
-          <iframe
-            src="https://www.youtube.com/embed/ZjpHvDz4gis?loop=1&playlist=ZjpHvDz4gis"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            style={{
-              width: "40%",
-              height: "100%"
-            }}
-          ></iframe>
-        </li>
-
-
-
-     
+        <ul className="text-left p-4">
+          <li className="flex justify-center">
+            <div className="w-full max-w-lg h-[300px]"> {/* ここでサイズ調整 */}
+              <iframe
+                src="https://www.youtube.com/embed/OGJ80-ybISg"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full rounded-lg"
+              ></iframe>
+            </div>
+          </li>
         </ul>
       </div>
     </div>
-
-      
   );
 }
 

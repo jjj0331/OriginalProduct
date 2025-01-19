@@ -67,24 +67,24 @@ const Form = () => {
 
             // バリデーションチェック
             if (!guidelineTitle.trim()) {
-              alert("ガイドラインのタイトルを入力してください。");
+              alert("タイトルを入力してください。");
               return;
           }
       
           if (!guidelineDescription.trim()) {
-              alert("ガイドラインの概要を入力してください。");
+              alert("概要を入力してください。");
               return;
           }
       
           if (todos.some(todo => !todo.title.trim())) {
-              alert("すべてのTodolistにタイトルを入力してください。");
+              alert("すべてのタスクにはタイトルを入力してください。");
               return;
           }
 
           // バリデーションチェック: 各Todoの詳細タスクのタイトルと内容
           const hasEmptyDetails = todos.some(todo => {
             if (todo.detail_tasks.length === 0) {
-              alert("すべてのTodolistには最低一つのクエストを設定してください。");
+              alert("すべてのタスクには最低一つのクエストを設定してください。");
               return true;
             }
             return todo.detail_tasks.some(detail => !detail.detailtitle?.trim() || !detail.detailcontent?.trim());
