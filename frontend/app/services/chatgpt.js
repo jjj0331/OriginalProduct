@@ -139,7 +139,7 @@ export const advicefromChatGPT = async (goal, retries = 2) => {
             role: 'user', 
             content: `
               目標：${goal}
-              目標に対して学習すべき内容を500文字以内でアドバイスしてください。
+              目標に対して学習すべき内容を300文字以内でアドバイスしてください。
             `
           }
         ],
