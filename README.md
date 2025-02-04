@@ -32,8 +32,8 @@ URL
 
 ## ■ 5.画面遷移図
 
-## ■ 6.機能一覧
-
+## ■ 6.使い方
+https://youtu.be/aiCxd-ovODQ
 
 
 
