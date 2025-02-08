@@ -31,6 +31,7 @@ URL
 ## ■ 4.インフラ構成図
 
 ## ■ 5.画面遷移図
+![image](https://github.com/user-attachments/assets/f484a53b-ee73-46be-bf59-e07b928c4c4f)
 
 ## ■ 6.機能一覧
    - ガイドラインの検索
