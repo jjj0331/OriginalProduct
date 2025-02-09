@@ -59,16 +59,6 @@ URL
 |![image](https://github.com/user-attachments/assets/4772bd43-da6d-4cc6-a0a4-2af12ed73967)|![image](https://github.com/user-attachments/assets/5b787b3c-7aa4-49bc-a226-b69d117fce6f)|
 |マイページ(お気に入り)に登録したガイドラインを学習することができる|学習フォームでフォームに回答を入力し送信するとChatGPTより回答を得ることができる|
 
-
-   - ユーザーの新規作成およびログイン機能
-   - 個人設定(目標を決め、ChatGPTより回答を得る)
-     
-   - ガイドラインの検索
-   - ガイドライン作成、編集、削除(ログイン時)
-   - ガイドラインの詳細を見る
-   - ガイドラインのお気に入り登録(ログイン時)
-   - ガイドラインの学習機能(ChatGPTによる判定機能)
-
 ## ■ 4.画面遷移図
 ![image](https://github.com/user-attachments/assets/f484a53b-ee73-46be-bf59-e07b928c4c4f)
 
