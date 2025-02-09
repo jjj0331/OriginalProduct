@@ -60,7 +60,8 @@ URL
 |マイページ(お気に入り)に登録したガイドラインを学習することができる|学習フォームでフォームに回答を入力し送信するとChatGPTより回答を得ることができる|
 
 ## ■ 4.画面遷移図
-![image](https://github.com/user-attachments/assets/f484a53b-ee73-46be-bf59-e07b928c4c4f)
+![image](https://github.com/user-attachments/assets/d69aa148-ea2c-4536-83ca-b4d305ca9814)
+
 
 ## ■ 5.使用技術
 ***フレームワーク***
