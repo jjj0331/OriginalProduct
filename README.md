@@ -34,23 +34,24 @@ URL
 
 ##  ■ 3.機能一覧 
 
-|**トップページ**|**ガイドラインの検索**|**ガイドライン詳細細**
-|----|----|
-| ![image](https://github.com/user-attachments/assets/2b92319c-592a-4d7b-b4d3-c8d7a6c45484) |![image](https://github.com/user-attachments/assets/d3f5ef2c-4846-4ea8-b1be-57284160d14e)|
-|みんなのガイドラインに存在するガイドラインがすべて表示されます。| 検索バーにキーワードを入力するとガイドラインを検索することも可能です。|
+|**トップページ**|**ガイドラインの検索**|**ガイドライン詳細細**|
+|----|----|----|
+| ![image](https://github.com/user-attachments/assets/2b92319c-592a-4d7b-b4d3-c8d7a6c45484) |![image](https://github.com/user-attachments/assets/d3f5ef2c-4846-4ea8-b1be-57284160d14e)|![image](https://github.com/user-attachments/assets/e5596c17-c4a1-4837-8a7f-75d799dd7f4f)|
+
+|みんなのガイドラインに存在するガイドラインがすべて表示されます。| 検索バーにキーワードを入力するとガイドラインを検索することも可能です。|ガイドラインの詳細を確認することができます|
 
 |**ログイン画面(新規ユーザー作成)**|**マイページ**|
 |----|----|
-|![image](https://github.com/user-attachments/assets/f3849c4e-2a54-408a-a047-2fe57cc9e2ae)|![image](https://github.com/user-attachments/assets/57960c23-1bcd-4a86-8eae-86877046f970)|
-|ログインおよびユーザーの新規作成が可能です。|お気に入り登録したガイドラインを参照可能です。  ガイドライン作成、編集、削除。学習の目標設定|
+|![image](https://github.com/user-attachments/assets/f3849c4e-2a54-408a-a047-2fe57cc9e2ae)|
+|ログインおよびユーザーの新規作成が可能です。|
 
 |**マイページ(お気に入り)**|**マイページ(新規作成)**|
 |----|----|
 |![image](https://github.com/user-attachments/assets/c08de139-0485-4686-90e8-11738991a856)|![image](https://github.com/user-attachments/assets/3d6143d0-4bea-4e5f-9b6e-a2b13950185a)|
 |お気に入り登録したガイドラインを参照できる|ガイドラインを新規作成できる|
 |**マイページ(編集)**|**マイページ(新規作成)**|
-|![image](https://github.com/user-attachments/assets/29daa0e0-3356-4809-a834-d391cbafe771)|![image](https://github.com/user-attachments/assets/3d6143d0-4bea-4e5f-9b6e-a2b13950185a)|
-|自分が作成したガイドラインを編集できる|ガイドラインを新規作成できる|
+|![image](https://github.com/user-attachments/assets/29daa0e0-3356-4809-a834-d391cbafe771)|![image](https://github.com/user-attachments/assets/33159aba-afce-428c-a6b8-f06031eb4b1f)|
+|自分が作成したガイドラインを編集できる|個人設定を登録でき、ChatGPTよりアドバイスを得ことができるる|
 
    - ユーザーの新規作成およびログイン機能
    - 個人設定(目標を決め、ChatGPTより回答を得る)
