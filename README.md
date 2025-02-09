@@ -48,9 +48,17 @@ URL
 |----|----|
 |![image](https://github.com/user-attachments/assets/c08de139-0485-4686-90e8-11738991a856)|![image](https://github.com/user-attachments/assets/3d6143d0-4bea-4e5f-9b6e-a2b13950185a)|
 |お気に入り登録したガイドラインを参照できる|ガイドラインを新規作成できる|
-|**マイページ(編集)**|**マイページ(個人設定)**|
+
+|**学習機能**|**マイページ(個人設定)**|
+|----|----|
 |![image](https://github.com/user-attachments/assets/29daa0e0-3356-4809-a834-d391cbafe771)|![image](https://github.com/user-attachments/assets/33159aba-afce-428c-a6b8-f06031eb4b1f)|
 |自分が作成したガイドラインを編集できる|個人設定を登録でき、ChatGPTよりアドバイスを得ことができるる|
+
+|**マイページ(お気に入り→学習する)**|**学習画面**|
+|----|----|
+|![image](https://github.com/user-attachments/assets/4772bd43-da6d-4cc6-a0a4-2af12ed73967)|![image](https://github.com/user-attachments/assets/5b787b3c-7aa4-49bc-a226-b69d117fce6f)|
+|マイページ(お気に入り)に登録したガイドラインを学習することができる|学習フォームでフォームに回答を入力し送信するとChatGPTより回答を得ることができる|
+
 
    - ユーザーの新規作成およびログイン機能
    - 個人設定(目標を決め、ChatGPTより回答を得る)
